@@ -12,8 +12,8 @@
 
 </head>
 <body>
-    <?php require 'ConnectLogin.php'; ?>
-    <?php require 'connectAgenda.php'; ?>
+    <?php require_once 'ConnectLogin.php'; ?>
+    <?php require_once 'connectAgenda.php'; ?>
 
 
     <h1>add to Agenda:</h1>
@@ -56,7 +56,7 @@
 
         //if the user is not logged in, redirect to the login page and stop the script
         if($_SESSION['username'] == '') {
-            //force the user to login (: man i can be so mean sometimes, or better said, i can be so lazy sometimes (: haha look table flip (╯°□°）╯︵ ┻━┻ )
+            //force the user to login (: man I can be so mean sometimes, or better said, I can be so lazy sometimes (: haha look table flip (╯°□°）╯︵ ┻━┻ )
             header("Location: login.php");
             exit();
         }
@@ -74,28 +74,28 @@
 
             //round the start and end time to the nearest 15 minutes
             $agenda_start_tijd = date("H:i", round(strtotime($agenda_start_tijd) / 900 ) * 900);
-            $agenda_eindDatum = date("H:i", round(strtotime($agenda_eindDatum) / 900 ) * 900);
+            $agenda_eind_tijd = date("H:i", round(strtotime($agenda_eind_tijd) / 900 ) * 900);
 
 
             //if the end time is before the start time, invert the start and end time
-            if($agenda_start_tijd > $agenda_eindDatum){
+            if($agenda_start_tijd > $agenda_eind_tijd){
                 $agenda_start_tijd = $_POST['AgendaEindTijd'];
                 $AgendaEindTijd = $_POST['AgendaStartTijd'];
             }
 
             //if the start time is the same as the end time, set the end time to 15 minutes later
-            if($agenda_start_tijd == $agenda_eindDatum){
-                $agenda_eindDatum = date("H:i", strtotime($AgendaEindTijd) + 900);
+            if($agenda_start_tijd == $agenda_eind_datum){
+                $agenda_eindDatum = date("H:i", strtotime($agenda_eind_tijd) + 900);
             }
 
             //if the start time is 00:00, set the end time to 00:01
             if($agenda_start_tijd == "00:00"){
-                $agenda_eindDatum = "00:01";
+                $agenda_start_tijd = "00:01";
             }
 
             //if the end time is 00:00, set the end time to 23:59
-            if($agenda_eindDatum == "00:00"){
-                $agenda_eindDatum = "23:59";
+            if($agenda_eind_tijd == "00:00"){
+                $agenda_eind_tijd = "23:59";
             }
 
             //run the query in the database
