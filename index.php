@@ -18,34 +18,30 @@
 
     <h1>add to Agenda:</h1>
     <form method="POST" action="index.php">
-        <label for="AgendaNaam">AgendaNaam: </label>
-        <input type="text" name="AgendaNaam" placeholder="AgendaNaam"><br>
+        <label for="agenda-naam">AgendaNaam: </label>
+        <input type="text" name="agenda-naam" placeholder="AgendaNaam"><br>
 
-        <label for="AgendaOmschrijving">AgendaOmschrijving: </label>
-        <input type="text" name="AgendaOmschrijving" placeholder="AgendaOmschrijving"><br>
+        <label for="agenda-omschrijving">AgendaOmschrijving: </label>
+        <input type="text" name="agenda-omschrijving" placeholder="AgendaOmschrijving"><br>
 
-        <label for="AgendaStartDatum">AgendaDatum: </label>
-        <input type="date" name="AgendaStartDatum" placeholder="AgendaDatum"><br>
+        <label for="agenda-start-datum">AgendaDatum: </label>
+        <input type="date" name="agenda-start-datum" placeholder="AgendaDatum"><br>
 
-        <label for="AgendaStartTijd">AgendaStartTijd: </label>
-        <input type="time" name="AgendaStartTijd" placeholder="AgendaStartTijd"><br>
+        <label for="agenda-start-tijd">AgendaStartTijd: </label>
+        <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd"><br>
 
-        <label for="AgendaEindTijd">AgendaEindTijd: </label>
-        <input type="time" name="AgendaEindTijd" placeholder="AgendaEindTijd"><br>
+        <label for="agenda-eind-tijd">AgendaEindTijd: </label>
+        <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd"><br>
 
-        <label for="AgendaFunctie">Kies een functie: </label>
-        <select name="AgendaFunctie">
+        <label for="agenda-functie">Kies een functie: </label>
+        <select name="agenda-functie">
             <option value="werk">Werk</option>
             <option value="school">School</option>
             <option value="prive">Prive</option>
         </select><br>
 
-        <label for="AgendaKleur">AgendaKleur: </label>
-        <select name="AgendaKleur">
-            <option value="red">Rood</option>
-            <option value="green">Groen</option>
-            <option value="blue">Blauw</option>
-        </select><br>
+        <label for="agenda-kleur">AgendaKleur: </label>
+        <input type="color" name="agenda-kleur" placeholder="AgendaKleur"><br>
 
         <button type="submit" name="agenda-submit">Voeg to aan de Agenda</button>
     </form>
@@ -67,43 +63,43 @@
 
         //add to agenda
         if(isset($_POST['agenda-submit'])){
-            $AgendaNaam = $_POST['AgendaNaam'];
-            $AgendaOmschrijving = $_POST['AgendaOmschrijving'];
-            $AgendaStartDatum = $_POST['AgendaStartDatum'];
-            $AgendaEindDatum = $_POST['AgendaStartDatum'];
-            $AgendaStartTijd = $_POST['AgendaStartTijd'];
-            $AgendaEindTijd = $_POST['AgendaEindTijd'];
-            $AgendaFunctie = $_POST['AgendaFunctie'];
-            $AgendaKleur = $_POST['AgendaKleur'];
+            $agenda_naam = $_POST['agenda-naam'];
+            $agenda_omschrijving = $_POST['agenda-omschrijving'];
+            $agenda_start_datum = $_POST['agenda-start-datum'];
+            $agenda_eind_datum = $_POST['agenda-start-datum'];
+            $agenda_start_tijd = $_POST['agenda-start-tijd'];
+            $agenda_eind_tijd = $_POST['agenda-eind-tijd'];
+            $agenda_functie = $_POST['agenda-functie'];
+            $agenda_kleur = $_POST['agenda-kleur'];
 
             //round the start and end time to the nearest 15 minutes
-            $AgendaStartTijd = date("H:i", round(strtotime($AgendaStartTijd) / 900 ) * 900);
-            $AgendaEindTijd = date("H:i", round(strtotime($AgendaEindTijd) / 900 ) * 900);
+            $agenda_start_tijd = date("H:i", round(strtotime($agenda_start_tijd) / 900 ) * 900);
+            $agenda_eindDatum = date("H:i", round(strtotime($agenda_eindDatum) / 900 ) * 900);
 
 
             //if the end time is before the start time, invert the start and end time
-            if($AgendaStartTijd > $AgendaEindTijd){
-                $AgendaStartTijd = $_POST['AgendaEindTijd'];
+            if($agenda_start_tijd > $agenda_eindDatum){
+                $agenda_start_tijd = $_POST['AgendaEindTijd'];
                 $AgendaEindTijd = $_POST['AgendaStartTijd'];
             }
 
             //if the start time is the same as the end time, set the end time to 15 minutes later
-            if($AgendaStartTijd == $AgendaEindTijd){
-                $AgendaEindTijd = date("H:i", strtotime($AgendaEindTijd) + 900);
+            if($agenda_start_tijd == $agenda_eindDatum){
+                $agenda_eindDatum = date("H:i", strtotime($AgendaEindTijd) + 900);
             }
 
             //if the start time is 00:00, set the end time to 00:01
-            if($AgendaStartTijd == "00:00"){
-                $AgendaEindTijd = "00:01";
+            if($agenda_start_tijd == "00:00"){
+                $agenda_eindDatum = "00:01";
             }
 
             //if the end time is 00:00, set the end time to 23:59
-            if($AgendaEindTijd == "00:00"){
-                $AgendaEindTijd = "23:59";
+            if($agenda_eindDatum == "00:00"){
+                $agenda_eindDatum = "23:59";
             }
 
             //run the query in the database
-            $sqlAgenda = "INSERT INTO agenda (id, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$AgendaNaam' , '$AgendaOmschrijving', '$AgendaStartDatum', '$AgendaEindDatum', '$AgendaStartTijd', '$AgendaEindTijd', 'false', '$AgendaFunctie', '$AgendaKleur')";
+            $sqlAgenda = "INSERT INTO agenda (id, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
             $result = mysqli_query($connA, $sqlAgenda);
 
         }
@@ -153,9 +149,7 @@
     $sqlAgenda = "SELECT * FROM agenda WHERE startDatum BETWEEN '{$_SESSION['week_start']}' AND '{$_SESSION['week_end']}' ORDER BY startDatum ASC, startTijd ASC";
     $result = mysqli_query($connA, $sqlAgenda);
     $resultCheck = mysqli_num_rows($result);
-
-    //Display the time (one
-
+    
     // Display the week start and end dates
     echo "<div class='agenda-header'>";
         //Display the week start and end dates
