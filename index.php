@@ -149,7 +149,7 @@
     $sqlAgenda = "SELECT * FROM agenda WHERE startDatum BETWEEN '{$_SESSION['week_start']}' AND '{$_SESSION['week_end']}' ORDER BY startDatum ASC, startTijd ASC";
     $result = mysqli_query($connA, $sqlAgenda);
     $resultCheck = mysqli_num_rows($result);
-    
+
     // Display the week start and end dates
     echo "<div class='agenda-header'>";
         //Display the week start and end dates

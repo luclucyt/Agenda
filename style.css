@@ -8,10 +8,10 @@
 }
 
 .agenda-item{
-    overflow-y: scroll;
+
     margin-bottom: 10px;
 
-    border: 1px solid #000;
+    border-radius: 10px;
 }
 
 .agenda-date0{
