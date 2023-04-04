@@ -2,36 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Agenda</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- JAVA SCRIPT -->
+    <script src="agenda.js" defer></script>
+
 </head>
 <body>
-    <?php require_once 'ConnectLogin.php'; ?>
     <?php require_once 'connectAgenda.php'; ?>
 
 
     <h1>add to Agenda:</h1>
     <form method="POST" action="index.php">
         <label for="agenda-naam">AgendaNaam: </label>
-        <input type="text" name="agenda-naam" placeholder="AgendaNaam"><br>
+        <input type="text" name="agenda-naam" placeholder="AgendaNaam" value="test"><br>
 
         <label for="agenda-omschrijving">AgendaOmschrijving: </label>
-        <input type="text" name="agenda-omschrijving" placeholder="AgendaOmschrijving"><br>
+        <input type="text" name="agenda-omschrijving" placeholder="AgendaOmschrijving" value="test"><br>
 
         <label for="agenda-start-datum">AgendaDatum: </label>
-        <input type="date" name="agenda-start-datum" placeholder="AgendaDatum"><br>
+        <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date"><br>
 
         <label for="agenda-start-tijd">AgendaStartTijd: </label>
-        <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd"><br>
+        <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="10:00" id="agenda-start-time"><br>
 
         <label for="agenda-eind-tijd">AgendaEindTijd: </label>
-        <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd"><br>
+        <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="17:00" id="agenda-eind-time"><br>
 
         <label for="agenda-functie">Kies een functie: </label>
         <select name="agenda-functie">
@@ -61,6 +62,11 @@
             exit();
         }
 
+        $username = $_SESSION['username'];
+        $userID = $_SESSION['userID'];
+
+        echo "<h1>Welkom $username, $userID </h1>";
+
         //add to agenda
         if(isset($_POST['agenda-submit'])){
             $agenda_naam = $_POST['agenda-naam'];
@@ -79,8 +85,8 @@
 
             //if the end time is before the start time, invert the start and end time
             if($agenda_start_tijd > $agenda_eind_tijd){
-                $agenda_start_tijd = $_POST['AgendaEindTijd'];
-                $AgendaEindTijd = $_POST['AgendaStartTijd'];
+                $agenda_start_tijd = $_POST['agenda-eind-tijd'];
+                $agenda_eind_tijd = $_POST['agenda-start-tijd'];
             }
 
             //if the start time is the same as the end time, set the end time to 15 minutes later
@@ -90,7 +96,7 @@
 
             //if the start time is 00:00, set the end time to 00:01
             if($agenda_start_tijd == "00:00"){
-                $agenda_start_tijd = "00:01";
+                $agenda_start_tijd = "00:00";
             }
 
             //if the end time is 00:00, set the end time to 23:59
@@ -98,9 +104,14 @@
                 $agenda_eind_tijd = "23:59";
             }
 
+            //if the start time the same as the end time, set the end time to 15 minutes later
+            if($agenda_start_tijd == $agenda_eind_tijd){
+                $agenda_eind_tijd = date("H:i", strtotime($agenda_eind_tijd) + 900);
+            }
+
             //run the query in the database
-            $sqlAgenda = "INSERT INTO agenda (id, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
-            $result = mysqli_query($connA, $sqlAgenda);
+            $sqlAgenda = "INSERT INTO agenda (id, userID, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$userID', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
+            $result = mysqli_query($connection, $sqlAgenda);
 
         }
     ?>
@@ -145,9 +156,11 @@
         $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_end'])));
     }
 
+    echo "<input type='hidden' id='week_start' value='$week_start'>";
+
     // Query the database for all agenda items within the current week range
-    $sqlAgenda = "SELECT * FROM agenda WHERE startDatum BETWEEN '{$_SESSION['week_start']}' AND '{$_SESSION['week_end']}' ORDER BY startDatum ASC, startTijd ASC";
-    $result = mysqli_query($connA, $sqlAgenda);
+    $sqlAgenda = "SELECT * FROM agenda WHERE userID = '{$_SESSION['userID']}' AND (startDatum BETWEEN '{$_SESSION['week_start']}' AND '{$_SESSION['week_end']}') ORDER BY startDatum ASC, startTijd ASC";
+    $result = mysqli_query($connection, $sqlAgenda);
     $resultCheck = mysqli_num_rows($result);
 
     // Display the week start and end dates
@@ -160,8 +173,10 @@
     echo "</div>";
 
     // If there are agenda items in the current week range, display them
+
+    echo "<div class='agenda-wrapper'>";
     if($resultCheck > 0){
-        echo "<div class='agenda-container'>";
+
         while($row = mysqli_fetch_assoc($result)){
 
             //calculate the difference in days between the start date and the week start date
@@ -202,16 +217,19 @@
             //close the agenda item
             echo "</div>";
         }
-        //close the agenda container
-        echo "</div>";
+
     }
+    //close the agenda container
+    echo "</div>";
 
     //delete button is pressed
     if(isset($_POST['agenda-delete'])){
         $id = $_POST['id'];
         $sqlAgenda = "DELETE FROM agenda WHERE id = '$id'";
-        $result = mysqli_query($connA, $sqlAgenda);
-        header("Location: index.php");
+        $result = mysqli_query($connection, $sqlAgenda);
+
+        //refresh the page
+        echo "<script>window.location.href = 'index.php';</script>";
     }
     ?>
 
