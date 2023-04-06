@@ -5,25 +5,28 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LogIN</title>
+    <title>Log in</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../CSS/login.css">
+
+    <!-- JS -->
+    <script src="../JS/login.js" defer></script>
 </head>
 <body>
 
     <?php include_once 'connectAgenda.php'; ?>
 
-    <h1>Sign up</h1>
-    <form method="POST" action="">
-        <label for="username">Username: </label>
-        <input type="text" name="username" placeholder="Username">
+    <div class="login-wrapper">
+        <h1>Sign up: </h1>
+        <form method="POST" action="">
+            <input type="text" name="username" placeholder="Username" class="input-sign-up"><br>
+            <input type="email" name="email" placeholder="Email" class="input-sign-up"><br>
+            <input type="password" name="password" placeholder="Password" id="password" class="input-sign-up"><br>
 
-        <label for="email">Email: </label>
-        <input type="email" name="email" placeholder="Email">
-
-        <label for="password">Password: </label>
-        <input type="password" name="password" placeholder="Password" id="password">
-
-        <button type="submit" name="signup-submit" id="submit-button">Sign up</button>
-    </form><br>
+            <button type="submit" name="signup-submit" id="submit-button" class="submit-sign-up">Sign up</button>
+        </form><br>
+    </div>
 
     <h1>Log in</h1>
     <form method="POST" action="">
