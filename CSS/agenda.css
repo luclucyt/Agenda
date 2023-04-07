@@ -32,7 +32,12 @@
     font-weight: bold;
     text-align: center;
     position: sticky;
-    top: 0;
+    top: -1%;
+
+
+    background: rgba(20, 1, 82, 0.75);
+    padding: 1.5% 0 1% 1%;
+    border-radius: 10px 10px 10px 10px;
 }
 
 .agenda-day-line{
@@ -50,7 +55,10 @@
     font-size: 18px;
     border: 1px solid var(--text);
     position: relative;
-    background: var(--oxford-blue);
+    box-sizing: border-box;
+    background: var(--federal-blue);
+    margin-right: 1.5%;
+    opacity: 100%;
 }
 
 .current-day{
@@ -112,10 +120,9 @@ input[type="text"]{
 
 .week-buttons{
     display: flex;
-    position: fixed;
     justify-content: space-between;
     width: 80%;
-    right: 0;
+    float: right;
     margin-top: 2.3%;
 }
 
