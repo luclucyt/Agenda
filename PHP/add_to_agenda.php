@@ -65,4 +65,3 @@
 
     //go to the agenda page after adding the data
     header("index.php");
-?>

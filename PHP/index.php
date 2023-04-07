@@ -7,6 +7,7 @@
     <title>Agenda</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="../CSS/root.css">
     <link rel="stylesheet" href="../CSS/agenda.css">
 
     <!-- JAVA SCRIPT -->
@@ -16,12 +17,13 @@
 <body>
     <?php require_once 'connectAgenda.php'; ?>
 
-    <form method="post">
-         <input type="submit" name="prev_week" value="Vorige week">
-         <input type="submit" name="next_week" value="Volgende week">
+    <form method="post" class="week-buttons">
+         <input type="submit" name="prev_week" value="Vorige week" class="week-button">
+         <input type="submit" name="this_week" value="Deze week" class="week-button">
+         <input type="submit" name="next_week" value="Volgende week" class="week-button">
     </form>
 
-    <form method="post">
+    <form method="post" class="log-out">
         <input type="submit" name="logout" value="Log out">
     </form>
 
@@ -65,6 +67,25 @@
         $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_end'])));
     }
 
+    // Check if the this week button has been clicked
+    if(isset($_POST['this_week'])) {
+        // Get the current date
+        $date = date('Y-m-d');
+
+        // Get the current week day
+        $current_week_day = date('N', strtotime($date));
+
+        // Get the start date of the week
+        $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+
+        // Get the end date of the week
+        $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+
+        // Set the session variables
+        $_SESSION['week_start'] = $week_start;
+        $_SESSION['week_end'] = $week_end;
+    }
+
     // Check if the next week button has been clicked
     if(isset($_POST['next_week'])) {
         // Move the week start and end dates forward by 7 days
@@ -85,11 +106,37 @@
     ?>
     <div class='agenda-header'>
         <?php
-            //Display the week start and end dates
             for ($i = 0; $i < 7; $i++) {
-            $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
-            echo "<div class='agenda-day'>$date</div>";
-        } ?>
+                $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+
+                // Get the name of the day of the week in Dutch
+                $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+
+                if($day_name == "Monday") {
+                    $day_name = "Maandag";
+                } elseif($day_name == "Tuesday") {
+                    $day_name = "Dinsdag";
+                } elseif($day_name == "Wednesday") {
+                    $day_name = "Woensdag";
+                } elseif($day_name == "Thursday") {
+                    $day_name = "Donderdag";
+                } elseif($day_name == "Friday") {
+                    $day_name = "Vrijdag";
+                } elseif($day_name == "Saturday") {
+                    $day_name = "Zaterdag";
+                } elseif($day_name == "Sunday") {
+                    $day_name = "Zondag";
+                }
+
+                // If that day is today's day, highlight it and add the name of the day
+                if ($date == date('jS M')) {
+                    $date = "<div class='agenda-day current-day'>$date, $day_name</div>";
+                } else {
+                    $date = "<div class='agenda-day'>$date, $day_name</div>";
+                }
+                echo $date;
+            }
+        ?>
 
     </div>
 

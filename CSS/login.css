@@ -1,64 +1,58 @@
-:root{
-   --text: rgb(230, 230, 230);
-
-    --black: rgb(2, 1, 10);
-    --oxford-blue: rgb(4, 5, 46);
-    --federal-blue: rgb(20, 1, 82);
-    --neavy-blue: rgb(34, 0, 124);
-    --dark-blue: rgb(13, 0, 164);
-}
-*{
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--text);
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.login-wrapper{
-
-    padding-left: 2.5%;
-    padding-right: 5%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
+.main-login-wrapper{
+    padding: 0.5% 5% 0.5% 2.5%;
 
     width: 40%;
 
     border-radius: 10px;
 
     background-color: var(--federal-blue);
-
+    transition: all 0.3s ease-in-out;
 }
 
-.input-sign-up{
-    margin: 1% ;
-    margin-left: 10%;
-
+.input-sign-up, .login-input{
+    margin: 1% 1% 1% 10%;
     padding: 2%;
 
     width: 80%;
+
     border-radius: 10px;
     border: 1px solid #ccc;
 }
 
-.submit-sign-up{
+.submit-button{
     margin-top: 2%;
-    background-color: var(--dark-blue);
+    padding: 1%;
 
-    padding: 2.5%;
     width: 30%;
 
     border: none;
     border-radius: 10px;
 
+    background-color: var(--dark-blue);
     transition: all 0.3s ease-in-out;
 }
 
-.submit-sign-up:hover{
+.submit-button:hover{
     background-color: var(--neavy-blue);
 }
 
-body{
-    min-height: 98vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.login-wrapper, .signup-wrapper{
+    overflow: hidden;
+}
+
+input[type="text"], input[type="password"], input[type="email"]{
     background-color: var(--oxford-blue);
+}
+
+.login-toggle{
+    text-decoration: underline 1px var(--text);
+    cursor: pointer;
+
+    font-size: large;
 }
