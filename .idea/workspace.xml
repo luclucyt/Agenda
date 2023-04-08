@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7129692a-3748-4e85-b864-9768456ccc55" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/htdocs.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/agenda.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/agenda.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/root.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/root.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JS/agenda.js" beforeDir="false" afterPath="$PROJECT_DIR$/JS/agenda.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PHP/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" />
+    <list default="true" id="7129692a-3748-4e85-b864-9768456ccc55" name="Changes" comment="commit">
+      <change beforePath="$PROJECT_DIR$/PHP/connectAgenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/connectAgenda.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,8 +77,23 @@
       <updated>1680870735533</updated>
       <workItem from="1680870737703" duration="7936000" />
       <workItem from="1680968633177" duration="6932000" />
-      <workItem from="1680987075151" duration="1794000" />
+      <workItem from="1680987075151" duration="2045000" />
     </task>
+    <task id="LOCAL-00001" summary="commit">
+      <created>1680989097683</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680989097683</updated>
+    </task>
+    <task id="LOCAL-00002" summary="commit">
+      <created>1680989105149</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680989105149</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,5 +109,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
 </project>
