@@ -10,9 +10,35 @@
 *{
     font-family: Arial, Helvetica, sans-serif;
     color: var(--text);
+
+    user-select: none;
 }
 
 body{
     min-height: 98vh;
     background-color: var(--oxford-blue);
 }
+
+/*width */
+div::-webkit-scrollbar{
+    width: 15px;
+}
+
+/* Track */
+div::-webkit-scrollbar-track {
+    background: var(--oxford-blue);
+}
+
+/* Handle */
+div::-webkit-scrollbar-thumb {
+    background: var(--neavy-blue);
+    border-left: 3px solid var(--oxford-blue);
+    border-right: 3px solid var(--oxford-blue);
+
+}
+
+/* Handle on hover */
+div::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-blue);
+}
+

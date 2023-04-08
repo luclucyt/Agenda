@@ -1,5 +1,5 @@
 let agenda_wrapper = document.getElementsByClassName('agenda-wrapper')[0];
-
+let start_timeInverted = false;
 let row_amount = 96;
 let colom_amount = 7;
 
@@ -73,10 +73,69 @@ agenda_wrapper.addEventListener('mousemove', function(event) {
 
         agenda_item_temp.style.gridColumn = colom;
 
-        agenda_item_temp.style.backgroundColor = 'red';
+        agenda_item_temp.style.backgroundColor = '#22007c';
         agenda_item_temp.style.border = '1px solid black';
-        document.getElementsByClassName('agenda-item-temp')[0].innerHTML = '<form method="POST" action="../PHP/index.php"><label for="agenda-naam">AgendaNaam: </label><input type="text" name="agenda-naam" placeholder="AgendaNaam" value="test" id="agenda-naam"><br> <label for="agenda-omschrijving">AgendaOmschrijving: </label><input type="text" name="agenda-omschrijving" placeholder="AgendaOmschrijving" value="test" id="agenda-omschrijving"><br> <label for="agenda-start-datum" style="position: absolute; display: none">AgendaDatum: </label><input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date"  style="position: absolute; display: none"><br><label for="agenda-start-tijd">AgendaStartTijd: </label><input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="' + start_time + '" id="agenda-start-time"><br><label for="agenda-eind-tijd">AgendaEindTijd: </label><input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="' + end_time + '" id="agenda-eind-time"><br><label For="agenda-functie">Kies een functie: </label><select name="agenda-functie" id="agenda-functie"><option value="werk">Werk</option><option value="school">School</option><option value="prive">Prive</option></select><br><label for="agenda-kleur">AgendaKleur: </label><input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" id="agenda-kleur" value="#ff0000"><br><button type="submit" name="agenda-submit">Voeg to aan de Agenda</button></form>';
+
+        if (start_time > end_time){
+            let temp = start_time;
+            start_time = end_time;
+            end_time = temp;
+
+            start_timeInverted = true;
+        }
+
+        document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
+            <form method="POST" action="../PHP/index.php" autocomplete="off" id="add-to-agenda-form">
+                <div>
+                    <input type="text" name="agenda-naam" placeholder="Titel" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>       
+                    
+                    <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving" required oninvalid="this.setCustomValidity('Voer een omschrijving in')" onchange="this.setCustomValidity('')"> 
+                    
+                    <p id="end-start-time">` + start_time + ` - ` + end_time + `</p>             
+                    
+
+                    <label For="agenda-functie">Kies een functie: </label>
+                    <select name="agenda-functie" id="agenda-functie">
+                        <option value="werk">Werk</option>
+                        <option value="school">School</option>
+                        <option value="prive">Prive</option>
+                    </select><br>
+                    
+                    <label for="agenda-kleur">AgendaKleur: </label>
+                    <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" id="agenda-kleur" value="#22007c"><br>
+                    
+                    <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date" hidden>
+                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + start_time + `" id="agenda-start-time" hidden><br>
+                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + end_time + `" id="agenda-eind-time" hidden><br>
+                
+                </div>
+                <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button></form>`;
+
+        if(start_timeInverted == true){
+            let temp = start_time;
+            start_time = end_time;
+            end_time = temp;
+
+            start_timeInverted = false;
+        }
+
+        document.getElementById('agenda-naam').addEventListener('input', function(event){
+
+            let input = event.target.value;
+            input = input.charAt(0).toUpperCase() + input.slice(1);
+            console.log(input);
+            document.getElementById('agenda-naam').value = input;
+        });
+
+        document.getElementById('agenda-omschrijving').addEventListener('input', function(event){
+            let input = event.target.value;
+            input = input.charAt(0).toUpperCase() + input.slice(1);
+            console.log(input);
+            document.getElementById('agenda-omschrijving').value = input;
+        });
     }
+
+
 });
 
 
@@ -118,3 +177,6 @@ function get_colom(event){
 
     return [Math.floor(x / colom_width), day_offset];
 }
+
+
+
