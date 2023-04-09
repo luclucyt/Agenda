@@ -18,23 +18,23 @@
     <?php include 'connectAgenda.php'; ?>
 
     <div class="header">
-        <h1>Agenda</h1>
+        <h1>Agenda:</h1>
     </div>
 
-    <div class="filter-agenda-wrapper">
-        <div class="filter-agenda">
-            <h2>Filter agenda:</h2>
-            <form method="post" class="filter-agenda-form">
-                <label for="filter">Filter:</label>
-                <select name="filter" class="agenda-filter-function">
-                    <option value="all">Alles</option>
-                    <option value="werk">Werk</option>
-                    <option value="school">School</option>
-                    <option value="prive">Persoonlijk</option>
-                </select>
-            </form>
-        </div>
-    </div>
+<!--    <div class="filter-agenda-wrapper">-->
+<!--        <div class="filter-agenda">-->
+<!--            <h2>Filter agenda:</h2>-->
+<!--            <form method="post" class="filter-agenda-form">-->
+<!--                <label for="filter">Filter:</label>-->
+<!--                <select name="filter" class="agenda-filter-function">-->
+<!--                    <option value="all">Alles</option>-->
+<!--                    <option value="werk">Werk</option>-->
+<!--                    <option value="school">School</option>-->
+<!--                    <option value="prive">Persoonlijk</option>-->
+<!--                </select>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
     <form method="post" class="week-buttons">
@@ -49,7 +49,7 @@
 
     <?php include 'add_to_agenda.php'; ?>
 
-    <h1>Agenda:</h1>
+<!--    <h1>Agenda:</h1>-->
     <?php
         if(isset($_POST['logout'])) {
             session_destroy();

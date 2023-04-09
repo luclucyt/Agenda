@@ -1,5 +1,4 @@
 <?php
-
     session_start();
 
     //if the user is not logged in, redirect to the login page

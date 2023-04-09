@@ -44,6 +44,7 @@
         <p class="login-toggle">already have an account? Login</p>
 
         <?php
+            //start the session
             if (session_status() == PHP_SESSION_NONE) {
                 session_set_cookie_params(31536000);
                 session_start(); //Start the session if it doesn't exist
@@ -94,7 +95,6 @@
                 $result2 = mysqli_query($connection, $existsEmailSQL);
 
                 if (mysqli_num_rows($result) == 0 && mysqli_num_rows($result2) == 0) {
-
                     //insert data into database
                     $sql = "INSERT INTO login (id, username, email, password) VALUES ('', '$username' , '$email', '$password')";
 

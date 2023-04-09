@@ -5,8 +5,9 @@ body{
 .main-main-agenda-wrapper{
     height: 90vh;
     overflow-y: scroll;
+    overflow-x: hidden;
+    float: right;
 
-    margin-top: -44px;
 }
 .main-agenda-wrapper{
     display: flex;
@@ -36,7 +37,7 @@ body{
 .agenda-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-gap: 10px;
+    grid-gap: 25px;
     width: 80%;
     float: right;
     margin-bottom: 10px;
@@ -49,6 +50,8 @@ body{
     background: rgba(20, 1, 82, 0.75);
     padding: 1.5% 0 1% 1%;
     border-radius: 10px 10px 10px 10px;
+
+    margin-right: -10px;
 }
 
 .agenda-day {
