@@ -17,6 +17,26 @@
 <body>
     <?php include 'connectAgenda.php'; ?>
 
+    <div class="header">
+        <h1>Agenda</h1>
+    </div>
+
+    <div class="filter-agenda-wrapper">
+        <div class="filter-agenda">
+            <h2>Filter agenda:</h2>
+            <form method="post" class="filter-agenda-form">
+                <label for="filter">Filter:</label>
+                <select name="filter" class="agenda-filter-function">
+                    <option value="all">Alles</option>
+                    <option value="werk">Werk</option>
+                    <option value="school">School</option>
+                    <option value="prive">Persoonlijk</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+
     <form method="post" class="week-buttons">
          <input type="submit" name="prev_week" value="Vorige week" class="week-button">
          <input type="submit" name="this_week" value="Deze week" class="week-button">
@@ -66,7 +86,7 @@
             $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_end'])));
         }
 
-        // Check if the this week button has been clicked
+        // Check if this week button has been clicked
         if(isset($_POST['this_week'])) {
             // Get the current date
             $date = date('Y-m-d');
@@ -94,20 +114,24 @@
 
         echo "<input type='hidden' id='week_start' value='$week_start'>";
 
-        // Query the database for all agenda items within the current week range
-        $sqlAgenda = "SELECT * FROM agenda WHERE userID = '{$_SESSION['userID']}' AND (startDatum BETWEEN '{$_SESSION['week_start']}' AND '{$_SESSION['week_end']}') ORDER BY startDatum ASC, startTijd ASC";
+        // Query the database for all agenda items within the current week range and with the selected filter
+        $sqlAgenda = "SELECT * FROM agenda WHERE startDatum >= '$week_start' AND eindDatum <= '$week_end'";
         $result = mysqli_query($connection, $sqlAgenda);
         $resultCheck = mysqli_num_rows($result);
+        //put the form section back to its selcected value
+        if(isset($_POST['filter-submit'])) {
+            echo "<script>document.getElementById('filter').value = '{$_POST['filter']}'</script>";
+        }
 
     ?>
-
     <div class="main-main-agenda-wrapper">
+
         <div class='agenda-header'>
             <?php
                 for ($i = 0; $i < 7; $i++) {
                     $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
-                    // Get the name of the day of the week in Dutch
+                    // Get the name of the day of the week
                     $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
                     if($day_name == "Monday") {
@@ -148,7 +172,7 @@
         <div class='agenda-wrapper'>
             <div class="agenda-times">
                 <?php
-                    for($i = 0; $i <= 23; $i++){
+                for($i = 0; $i <= 23; $i++){
                 ?>
                     <div class="time-wrapper">
                         <div class="time-header"><?= $i ?> uur</div>
@@ -175,7 +199,7 @@
                     $endRow = floor(((strtotime($row['eindTijd']) - strtotime('00:00')) / 900) + 1);
 
                     //put the values in a variable
-                    $agenda_item_id = $row['id'];
+                    $agenda_item_id1 = $row['id'];
                     $agenda_item_naam = $row['naam'];
                     $agenda_item_omschrijving = $row['omschrijving'];
                     $agenda_item_startDatum = $row['startDatum'];
@@ -184,64 +208,26 @@
                     $agenda_item_functie = $row['functie'];
                     $agenda_item_kleur = $row['kleur'];
 
-                    echo "<div class='agenda-item agenda-date{$dayDifference}' style='background-color:{$agenda_item_kleur}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
+                    echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_kleur}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
                         echo "<h1 class='agenda'>{$agenda_item_naam}</h1>";
                         echo "<p>{$agenda_item_omschrijving}</p>";
                         echo "<p>{$agenda_item_startTijd} - {$agenda_item_eindTijd}</p>";
                         echo "<p>Functie: {$agenda_item_functie}</p>";
 
+
                         echo "<div class='agenda-form-wrapper'>";
-                            //edit button
-                            echo "<form method='POST' action='index.php'>";
-                                echo "<input type='hidden' name='id' value='{$agenda_item_id}'>";
-                                echo "<button type='submit' name='agenda-edit' class='agenda-edit'>Bewerk</button>";
-                            echo "</form>";
+
+
                             //delete button
                             echo "<form method='POST' action='index.php'>";
-                                echo "<input type='hidden' name='id' value='{$agenda_item_id}'>";
+                                echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
                                 echo "<button type='submit' name='agenda-delete' class='agenda-delete'>Verwijder</button>";
                             echo "</form>";
                         echo "</div>";
 
-
-                        //edit button is pressed
-                        if(isset($_POST['agenda-edit'])){
-                            $id = $_POST['id'];
-                            $sqlAgenda = "SELECT * FROM agenda WHERE id = '$id'";
-
-                            $result = mysqli_query($connection, $sqlAgenda);
-                            $row = mysqli_fetch_assoc($result);
-
-                            $agenda_item_id = $row['id'];
-                            $agenda_item_naam = $row['naam'];
-                            $agenda_item_omschrijving = $row['omschrijving'];
-                            $agenda_item_startDatum = $row['startDatum'];
-                            $agenda_item_startTijd = $row['startTijd'];
-                            $agenda_item_eindTijd = $row['eindTijd'];
-                            $agenda_item_functie = $row['functie'];
-                            $agenda_item_kleur = $row['kleur'];
-
-                        ?>
-                            <div class='edit-agenda-form60'>
-                                <form method="POST" action="index.php" class='update-form'>
-                                    <input type="hidden" name="id" value="<?php echo $agenda_item_id; ?>">
-                                    <input type="text" name="naam" value="<?php echo $agenda_item_naam; ?>">
-                                    <input type="text" name="omschrijving" value="<?php echo $agenda_item_omschrijving; ?>">
-                                    <input type="date" name="startDatum" value="<?php echo $agenda_item_startDatum; ?>">
-                                    <input type="time" name="startTijd" value="<?php echo $agenda_item_startTijd; ?>">
-                                    <input type="time" name="eindTijd" value="<?php echo $agenda_item_eindTijd; ?>">
-                                    <input type="text" name="functie" value="<?php echo $agenda_item_functie; ?>">
-                                    <input type="color" name="kleur" value="<?php echo $agenda_item_kleur; ?>">
-                                    <button type="submit" name="agenda-update">Update</button>
-                                </form>
-                            </div>
-                        <?php
-                        }
-
                     //close the agenda item
                     echo "</div>";
                 }
-
             }
             //close the agenda container
             echo "</div>";
@@ -275,7 +261,8 @@
 
                 //refresh the page
                 echo "<script>window.location.href = 'index.php';</script>";
-            } ?>
+            }
+        ?>
     </div>
 
     <script>

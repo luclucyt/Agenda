@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="agenda@localhost" uuid="f1ba5fff-5ae5-461f-aebf-b28edddcb545">
+    <data-source source="LOCAL" name="Home" uuid="1d690ea2-8277-42f0-87b3-656af7d67c67">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/agenda</jdbc-url>
+      <jdbc-url>jdbc:mysql://81.206.73.35:3306/agenda</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

@@ -102,7 +102,7 @@ agenda_wrapper.addEventListener('mousemove', function(event) {
                     </select><br>
                     
                     <label for="agenda-kleur">AgendaKleur: </label>
-                    <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" id="agenda-kleur" value="#22007c"><br>
+                    <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" value="#22007c"><br>
                     
                     <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date" hidden>
                     <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + start_time + `" id="agenda-start-time" hidden><br>
@@ -179,4 +179,19 @@ function get_colom(event){
 }
 
 
+document.getElementsByClassName('agenda-filter-function')[0].addEventListener('change', function(event){
+    let value = event.target.value;
+    console.log(value);
 
+    document.querySelectorAll('.agenda-item').forEach(function(item){
+        if(value == 'all'){
+            item.style.opacity = '1';
+        } else {
+            if (item.classList.contains(value)) {
+                item.style.opacity = '1';
+            } else {
+                item.style.opacity = '0.2';
+            }
+        }
+    });
+});
