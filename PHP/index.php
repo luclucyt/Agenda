@@ -35,9 +35,14 @@
     <div class="header">
         <h1>Agenda:</h1>
 
-        <form method="post" class="log-out-form">
-            <input type="submit" name="logout" value="Log uit" class="log-out">
-        </form>
+        <div>
+            <form method="post" class="log-out-form">
+                <input type="submit" name="logout" value="Log uit" class="log-out">
+            </form>
+            <form>
+                <input type="button" value="Settings" class="settings-button" onclick="window.location.href='settings.php'">
+            </form>
+        </div>
 
     </div>
 

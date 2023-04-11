@@ -98,7 +98,7 @@
 
                 if (mysqli_num_rows($result) == 0 && mysqli_num_rows($result2) == 0) {
                     //insert data into database
-                    $sql = "INSERT INTO login (id, username, email, password) VALUES ('', '$username' , '$email', '$password')";
+                    $sql = "INSERT INTO login (id, username, email, password, ColorTheme) VALUES ('', '$username' , '$email', '$password', 1)";
 
                     //check if the query is executed
                     if (mysqli_query($connection, $sql)) {
@@ -143,3 +143,9 @@
     </section>
 </body>
 </html>
+
+<script>
+    if(window.history.replaceState){
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
