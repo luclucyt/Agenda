@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="../CSS/notebook.png">
     <title>Agenda</title>
 
     <!-- CSS -->
@@ -553,4 +554,13 @@
 
         return [Math.floor(x / colom_width), day_offset];
     }
+
+    let gridWrapper = document.getElementsByClassName("agenda-grid-wrapper")[0];
+    gridWrapper.addEventListener('mousemove', function(event) {
+        let rect = gridWrapper.getBoundingClientRect();
+        let x = event.clientX + gridWrapper.scrollLeft - rect.left;
+        let y = event.clientY + gridWrapper.scrollTop - rect.top;
+        
+        console.log("Relative position: (" + x + ", " + y + ")");
+    });
 </script>
