@@ -1,10 +1,8 @@
 <?php
-    session_start();
-
-    //if the user is not logged in, redirect to the login page
-    if($_SESSION['username'] == '') {
-        header("Location: login.php");
-        exit();
+    //start the session
+    if (session_status() == PHP_SESSION_NONE) {
+        session_set_cookie_params(31536000);
+        session_start(); //Start the session if it doesn't exist
     }
     $userID = $_SESSION['userID'];
 
@@ -61,6 +59,3 @@
         $result = mysqli_query($connection, $sqlAgenda);
 
     }
-
-    //go to the agenda page after adding the data
-    header("index.php");

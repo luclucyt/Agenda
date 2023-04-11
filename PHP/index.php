@@ -15,27 +15,116 @@
 
 </head>
 <body>
+    <?php
+        //start the session
+        if (session_status() == PHP_SESSION_NONE) {
+            session_set_cookie_params(31536000);
+            session_start(); //Start the session if it doesn't exist
+        }
+
+        //if the user is not logged in, redirect to the login page
+        if($_SESSION['username'] == '') {
+            header("Location: login.php");
+            exit();
+        }
+        $userID = $_SESSION['userID'];
+    ?>
     <?php include 'connectAgenda.php'; ?>
 
     <div class="header">
         <h1>Agenda:</h1>
+
+        <form method="post" class="log-out-form">
+            <input type="submit" name="logout" value="Log uit" class="log-out">
+        </form>
+
     </div>
 
-<!--    <div class="filter-agenda-wrapper">-->
-<!--        <div class="filter-agenda">-->
-<!--            <h2>Filter agenda:</h2>-->
-<!--            <form method="post" class="filter-agenda-form">-->
-<!--                <label for="filter">Filter:</label>-->
-<!--                <select name="filter" class="agenda-filter-function">-->
-<!--                    <option value="all">Alles</option>-->
-<!--                    <option value="werk">Werk</option>-->
-<!--                    <option value="school">School</option>-->
-<!--                    <option value="prive">Persoonlijk</option>-->
-<!--                </select>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="functie-wrapper">
+        <div class="new-color-wrapper">
+            <h4>Nieuwe functie toevoegen:</h4>
+            <form method="POST" action="">
+                <label for="new-functie">Nieuwe functie:</label>
+                <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
+                <label for="new-color">Nieuwe kleur:</label>
+                <input type="color" id="new-color" name="new-color" placeholder="Nieuwe kleur"><br>
+
+                <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
+            </form>
+        </div>
+        <div class="functie-line"></div>
+        <div class="remove-color-wrapper">
+            <h4>Functie verwijderen:</h4>
+            <form method="POST" action="">
+                <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                <label for="remove-functie">Verwijder functie:</label><br>
+                <select name="remove-color-select" id="remove-color-select">
+                    <?php
+                        $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                        $removeColorResult = mysqli_query($connection, $removeColorQuery);
+                        while($row = mysqli_fetch_assoc($removeColorResult)) {
+                            $id = $row['id'];
+                            $functie = $row['functie'];
+                            echo "<option value='$id'>$functie</option>";
+                        }
+                    ?>
+                </select><br>
+                <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
+            </form>
+        </div>
+    </div>
+
+    <div class="agenda-filter-wrapper">
+        <div class="filter-wrapper">
+            <h4>Filter:</h4>
+            <form method="POST" action="">
+                <select name="filter-functie" id="filter-functie">
+                    <option value="0">Geen filter</option>
+                    <?php
+                        $filterQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                        $filterResult = mysqli_query($connection, $filterQuery);
+                        while($row = mysqli_fetch_assoc($filterResult)) {
+                            $id = $row['kleur'];
+                            $functie = $row['functie'];
+                            echo "<option value='$id'>$functie</option>";
+                        }
+                    ?>
+                </select><br>
+
+                <input type="submit" name="filter-submit" value="Filter" class="filter-submit">
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('filter-functie').addEventListener('input', function (){
+            //if there is a filter, hide all agenda items that don't have the same class as the filter
+            if(this.value != 0) {
+                let agendaItems = document.querySelectorAll('.agenda-item');
+                for(let i = 0; i < agendaItems.length; i++) {
+                    if(agendaItems[i].classList.contains(this.value)) {
+                        agendaItems[i].style.opacity = '1';
+                        agendaItems[i].style.boxShadow = 'rgb(255 255 255) 0px 0px 100px 10px';
+                    } else {
+                        agendaItems[i].style.opacity = '0.5';
+                        agendaItems[i].style.boxShadow = 'none';
+                    }
+                }
+            } else {
+                //if there is no filter, show all agenda items
+                let agendaItems = document.querySelectorAll('.agenda-item');
+                for(let i = 0; i < agendaItems.length; i++) {
+                    agendaItems[i].style.opacity = '1';
+                    agendaItems[i].style.boxShadow = 'none';
+                }
+            }
+        });
+    </script>
 
     <form method="post" class="week-buttons">
          <input type="submit" name="prev_week" value="Vorige week" class="week-button">
@@ -43,17 +132,12 @@
          <input type="submit" name="next_week" value="Volgende week" class="week-button">
     </form>
 
-    <form method="post" class="log-out-form">
-        <input type="submit" name="logout" value="Log uit" class="log-out">
-    </form>
-
     <?php include 'add_to_agenda.php'; ?>
 
-<!--    <h1>Agenda:</h1>-->
     <?php
         if(isset($_POST['logout'])) {
             session_destroy();
-            header('Location: login.php');
+            echo "<script>window.location.href = 'login.php';</script>";
         }
 
         // Get the current week start and end dates if they are not already set
@@ -114,15 +198,10 @@
 
         echo "<input type='hidden' id='week_start' value='$week_start'>";
 
-        // Query the database for all agenda items within the current week range and with the selected filter
+        // Query the database for all agenda items within the current week range
         $sqlAgenda = "SELECT * FROM agenda WHERE startDatum >= '$week_start' AND eindDatum <= '$week_end'";
         $result = mysqli_query($connection, $sqlAgenda);
         $resultCheck = mysqli_num_rows($result);
-        //put the form section back to its selcected value
-        if(isset($_POST['filter-submit'])) {
-            echo "<script>document.getElementById('filter').value = '{$_POST['filter']}'</script>";
-        }
-
     ?>
     <div class="main-main-agenda-wrapper">
 
@@ -169,7 +248,7 @@
             ?>
         </div>
 
-        <div class='agenda-wrapper'>
+        <div class='agenda-grid-wrapper'>
             <div class="agenda-times">
                 <?php
                 for($i = 0; $i <= 23; $i++){
@@ -208,16 +287,12 @@
                     $agenda_item_functie = $row['functie'];
                     $agenda_item_kleur = $row['kleur'];
 
-                    echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_kleur}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
-                        echo "<h1 class='agenda'>{$agenda_item_naam}</h1>";
-                        echo "<p>{$agenda_item_omschrijving}</p>";
+                    echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_functie}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
+                        echo "<h1 class='agenda-item-header'>{$agenda_item_naam}</h1>";
+                        echo "<p class='agenda-item-omschrijving'>{$agenda_item_omschrijving}</p>";
                         echo "<p>{$agenda_item_startTijd} - {$agenda_item_eindTijd}</p>";
-                        echo "<p>Functie: {$agenda_item_functie}</p>";
-
 
                         echo "<div class='agenda-form-wrapper'>";
-
-
                             //delete button
                             echo "<form method='POST' action='index.php'>";
                                 echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
@@ -242,27 +317,6 @@
             //refresh the page
             echo "<script>window.location.href = 'index.php';</script>";
         } ?>
-
-
-        <?php
-            //update button is pressed
-            if(isset($_POST['agenda-update'])){
-                $id = $_POST['id'];
-                $naam = $_POST['naam'];
-                $omschrijving = $_POST['omschrijving'];
-                $startDatum = $_POST['startDatum'];
-                $startTijd = $_POST['startTijd'];
-                $eindTijd = $_POST['eindTijd'];
-                $functie = $_POST['functie'];
-                $kleur = $_POST['kleur'];
-
-                $sqlAgenda = "UPDATE agenda SET naam = '$naam', omschrijving = '$omschrijving', startDatum = '$startDatum', startTijd = '$startTijd', eindTijd = '$eindTijd', functie = '$functie', kleur = '$kleur' WHERE id = '$id'";
-                $result = mysqli_query($connection, $sqlAgenda);
-
-                //refresh the page
-                echo "<script>window.location.href = 'index.php';</script>";
-            }
-        ?>
     </div>
 
     <script>
@@ -273,3 +327,230 @@
     </script>
 </body>
 </html>
+
+
+<?php
+    //if new color is submitted
+    if(isset($_POST['new-color-submit'])){
+        $newFunction = $_POST['new-functie'];
+        $newColor = $_POST['new-color'];
+
+        $SQL = "INSERT INTO kleuren (id, userID, functie, kleur) VALUES (NULL, '$userID', '$newFunction', '$newColor')";
+        $result = mysqli_query($connection, $SQL);
+
+        //refresh the page
+        echo "<script>window.location.href = 'index.php';</script>";
+    }
+
+    //if color is deleted
+    if(isset($_POST['remove-color-submit'])){
+        $id = $_POST['remove-color-select'];
+        $SQL = "DELETE FROM kleuren WHERE id = '$id'";
+        $result = mysqli_query($connection, $SQL);
+
+        //refresh the page
+        echo "<script>window.location.href</script>";
+    }
+?>
+
+<script>
+    let agenda_wrapper = document.getElementsByClassName('agenda-grid-wrapper')[0];
+    let start_timeInverted = false;
+    let row_amount = 96;
+    let colom_amount = 7;
+
+    let is_dragging = false;
+
+    let week_start;
+    let day_offset;
+
+    let start_row = 0;
+    let start_time = 0;
+
+    let start_date;
+
+    let end_row = 0;
+    let end_time = 0;
+
+    let colom = 0;
+
+    agenda_wrapper.addEventListener('mousedown', function(event) {
+
+        if (event.target === agenda_wrapper) {
+            //mouse is pressed on the agenda
+            is_dragging = true;
+            start_row = get_row(event)[0] + 1;
+            start_time = get_row(event)[1];
+
+            colom = get_colom(event)[0] + 1;
+
+            week_start = document.getElementById('week_start').value;
+            week_start = new Date(week_start);
+
+            start_date = new Date(week_start);
+            start_date.setDate(week_start.getDate() + get_colom(event)[1]);
+
+            start_date = start_date.toISOString().substring(0, 10)
+
+            //document.getElementById('agenda-start-time').value = start_time;
+
+
+            //remove all the temp agenda items
+            let temp_items = document.querySelectorAll('.agenda-item-temp');
+            temp_items.forEach(function (item) {
+                item.remove();
+            });
+        }
+
+    });
+
+    agenda_wrapper.addEventListener('mousemove', function(event) {
+        if(is_dragging == true){
+            //mouse is moving on the agenda and is pressed
+            end_row = get_row(event)[0] + 1;
+            end_time = get_row(event)[1];
+
+            //document.getElementById('agenda-eind-time').value = end_time;
+
+            //remove all the temp agenda items
+            let temp_items = document.querySelectorAll('.agenda-item-temp');
+            temp_items.forEach(function(item) {
+                item.remove();
+            });
+
+
+            let agenda_item_temp = document.createElement('div');
+            agenda_item_temp.classList.add('agenda-item-temp');
+
+            agenda_wrapper.appendChild(agenda_item_temp);
+
+            agenda_item_temp.style.gridRowStart = start_row;
+            agenda_item_temp.style.gridRowEnd = end_row;
+
+            agenda_item_temp.style.gridColumn = colom;
+
+            agenda_item_temp.style.backgroundColor = '#22007c';
+            agenda_item_temp.style.border = '1px solid whites';
+
+            if (start_time > end_time){
+                let temp = start_time;
+                start_time = end_time;
+                end_time = temp;
+
+                start_timeInverted = true;
+            }
+
+
+            document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
+            <form method="POST" action="../PHP/index.php" autocomplete="off" id="add-to-agenda-form">
+                <div>
+                    <input type="text" name="agenda-naam" placeholder="Titel" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>
+
+                    <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving" required oninvalid="this.setCustomValidity('Voer een omschrijving in')" onchange="this.setCustomValidity('')">
+
+                    <p id="end-start-time">` + start_time + ` - ` + end_time + `</p>
+
+
+                    <label For="agenda-functie">Kies een functie: </label>
+                    <select name="agenda-functie" id="agenda-functie">
+
+                    <?php
+                        //loop through the colors and echo them
+                        $slqKleuren = "SELECT * FROM kleuren WHERE userID = '$userID'";
+                        $result = mysqli_query($connection, $slqKleuren);
+                        $resultCheck = mysqli_num_rows($result);
+
+                        if($resultCheck > 0){
+                            while ($row = mysqli_fetch_assoc($result)){
+                                $functie = $row['functie'];
+                                $kleur = $row['kleur'];
+                                echo "<option value='$kleur'>$functie</option>";
+                            }
+                        }else{
+                            echo "<option value='Geen functie' style='background-color: #22007c'>Geen functie</option>";
+                        }
+                    ?>
+
+                    </select><br>
+
+                    <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" value="#22007c" hidden><br>
+
+                    <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date" hidden>
+                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + start_time + `" id="agenda-start-time" hidden><br>
+                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + end_time + `" id="agenda-eind-time" hidden><br>
+
+                </div>
+                <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button></form>`;
+
+            if(start_timeInverted == true){
+                let temp = start_time;
+                start_time = end_time;
+                end_time = temp;
+
+                start_timeInverted = false;
+            }
+
+            document.getElementById('agenda-naam').addEventListener('input', function(event){
+
+                let input = event.target.value;
+                input = input.charAt(0).toUpperCase() + input.slice(1);
+                console.log(input);
+                document.getElementById('agenda-naam').value = input;
+            });
+
+            document.getElementById('agenda-omschrijving').addEventListener('input', function(event){
+                let input = event.target.value;
+                input = input.charAt(0).toUpperCase() + input.slice(1);
+                console.log(input);
+                document.getElementById('agenda-omschrijving').value = input;
+            });
+        }
+
+
+    });
+
+
+    agenda_wrapper.addEventListener('mouseup', function(event) {
+        //mouse is not pressed on the agenda anymore
+        is_dragging = false;
+
+        document.getElementById('agenda-functie').addEventListener('input', function(event){
+            document.getElementsByClassName('agenda-item-temp')[0].style.backgroundColor = event.target.value;
+            document.getElementById('agenda-kleur').value = event.target.value;
+        });
+
+        document.getElementsByClassName('agenda-item-temp')[0].style.backgroundColor = document.getElementById('agenda-functie').value;
+        document.getElementById('agenda-kleur').value = document.getElementById('agenda-functie').value;
+
+        document.getElementById('agenda-start-date').value = start_date;
+    });
+
+    function get_row(event){
+        let rect = agenda_wrapper.getBoundingClientRect();
+        let y = event.clientY - rect.top;
+        let row_height = agenda_wrapper.clientHeight / row_amount;
+
+        //calucate the time that corresponds to the row (1 row = 15 minutes)
+        let time = Math.floor(y / row_height) * 15;
+        let hours = Math.floor(time / 60);
+        let minutes = time % 60;
+
+        // format the time value so it can be used in the input field
+        let formatted_time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+        //console.log(formatted_time);
+
+        return [Math.floor(y / row_height), formatted_time];
+    }
+
+    function get_colom(event){
+        let rect = agenda_wrapper.getBoundingClientRect();
+        let x = event.clientX - rect.left;
+        let colom_width = agenda_wrapper.clientWidth / colom_amount;
+
+        //calucate the day ofset that corresponds to the colom
+        day_offset = Math.floor(x / colom_width);
+
+        return [Math.floor(x / colom_width), day_offset];
+    }
+</script>

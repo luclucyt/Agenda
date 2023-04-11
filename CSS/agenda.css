@@ -2,6 +2,13 @@ body{
     overflow: hidden;
 }
 
+.header{
+    width: 100%;
+    display: flex;
+
+    justify-content: space-between;
+}
+
 .main-main-agenda-wrapper{
     height: 90vh;
     overflow-y: scroll;
@@ -13,7 +20,7 @@ body{
     display: flex;
 }
 
-.agenda-wrapper{
+.agenda-grid-wrapper{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(96, 15px);
@@ -21,6 +28,8 @@ body{
 
     width: 80%;
     float: right;
+
+    scroll-margin-top: 200px;
 }
 
 .agenda-item, .agenda-item-temp{
@@ -48,6 +57,8 @@ body{
     z-index: 99;
 
     background: rgba(20, 1, 82, 0.75);
+
+    
     padding: 1.5% 0 1% 1%;
     border-radius: 10px 10px 10px 10px;
 
@@ -72,17 +83,20 @@ body{
 }
 
 .log-out{
-    position: relative;
-    margin-top: 100px;
-    top: 0;
+    width: 150px;
     height: 50px;
     line-height: 50px;
     font-size: 18px;
     border: 1px solid var(--text);
     background: var(--federal-blue);
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px 0 0 10px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    margin-top: 10px;
+}
+.log-out:hover{
+    background: var(--text);
+    color: var(--oxford-blue);
 }
 
 .week-buttons{
@@ -90,7 +104,6 @@ body{
     justify-content: space-between;
     width: 80%;
     float: right;
-    margin-top: 6.3%;
 }
 
 .week-button{
@@ -132,7 +145,7 @@ body{
     background: rgb(127, 119, 119);
     opacity: 0.75;
     border-radius: 10px;
-    height: 85vh;
+    height: 88vh;
     margin-top: 25px;
 }
 
@@ -150,7 +163,7 @@ body{
     width: fit-content;
 }
 .time-line{
-     width: 83.5vw;
+     width: 82vw;
      position: absolute;
      left: 0;
      top: 0;
@@ -170,10 +183,14 @@ body{
 .agenda-date5{grid-column: 6;}
 .agenda-date6{grid-column: 7;}
 
+
 .agenda-item-temp, .agenda-item{
     background: var(--text);
     color: var(--oxford-blue);
     overflow-x: hidden;
+
+    border: 1px solid white;
+    transition: all 0.5s ease-in-out;
 }
 
 .agenda-item-temp input[type="text"], #end-start-time{
@@ -226,7 +243,7 @@ body{
     height: 100%;
 }
 
-select, select *{
+#agenda-functie, #agenda-functie *{
     width: 80%;
     padding: 5%;
     border-radius: 10px;
@@ -276,19 +293,156 @@ select, select *{
 
 
 /* agenda filer */
-.filter-agenda-wrapper {
-    position: fixed;
-    top: 20%;
-    left: 1%;
-
-    z-index: 99;
-
+.agenda-filter-wrapper{
     background-color: var(--neavy-blue);
-    border-radius: 10px;
+    width: 12vw;
+
+    position: fixed;
+    top: 73vh;
+
     padding: 1%;
+    border-radius: 10px;
 }
 
-.filter-submit {
+.agenda-filter-wrapper form{
+    width: 12vw;
+}
+
+.filter-submit{
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+    margin: 5%;
+}
+
+.filter-submit:hover{
+    background: var(--text);
+    color: var(--oxford-blue);
+}
+
+#filter-functie{
+    width: 90%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+    margin: 5%;
+}
+
+
+/* agenda remove/add functie */
+
+.functie-line{
+    width: 100%;
+    background: var(--text);
+    opacity: 0.75;
+    border-radius: 1px;
+    height: 1px;
+    display: block;
+    border-radius: 10px;
+}
+.functie-wrapper{
+    background-color: var(--neavy-blue);
+    border-radius: 10px;
+
+    width: fit-content;
+    padding: 1%;
+
+    position: fixed;
+    top: 13vh;
+
+    height: 55vh;
+}
+
+.functie-wrapper form{
+    width: 12vw;
+}
+
+#new-functie{
+    width: 90%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: text;
+
+    transition: all 0.2s ease-in-out;
+    margin: 5%;
+}
+
+#new-color{
+    width: 90%;
+    height: 50px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+    margin: 5%;
+}
+
+.new-color-submit{
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+    margin: 5%;
+}
+.new-color-submit:hover{
+    background: var(--text);
+    color: var(--oxford-blue);
+}
+
+.remove-functie-wrapper{
+    background-color: var(--neavy-blue);
+    border-radius: 10px;
+
+    width: fit-content;
+    padding: 1%;
+
+    position: fixed;
+    top: 50vh;
+
+    height: fit-content;
+}
+
+#remove-color-select{
+    width: 90%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--text);
+    background: var(--oxford-blue);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+    margin: 5%;
+}
+
+.remove-color-submit{
     width: 50%;
     height: 50px;
     border-radius: 10px;
@@ -302,7 +456,7 @@ select, select *{
     margin: 5%;
 }
 
-.filter-submit:hover {
+.remove-color-submit:hover{
     background: var(--text);
     color: var(--oxford-blue);
 }

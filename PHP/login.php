@@ -21,19 +21,18 @@
 
         <div class="signup-wrapper">
             <h1>Registeer:</h1>
-            <form method="POST" action="">
+            <form method="POST" action="" autocomplete="off">
                 <input type="text" name="username" placeholder="Gebruikersnaam" class="input-sign-up"><br>
                 <input type="email" name="email" placeholder="E-mail" class="input-sign-up"><br>
                 <input type="password" name="password" placeholder="Wachtwoord" id="password" class="input-sign-up"><br>
 
                 <button type="submit" name="signup-submit" id="submit-button" class="submit-button"><h2>Registreer nu</h2></button>
-
-            </form><br>
+            </form>
         </div>
 
         <div class="login-wrapper">
             <h1>Log in:</h1>
-            <form method="post">
+            <form method="post" autocomplete="off">
                 <input type="text" name="username" placeholder="Gebruikersnaam" class="login-input"><br>
                 <input type="password" name="password" placeholder="Wachtwoord" class="login-input"><br>
 
@@ -49,7 +48,6 @@
                 session_set_cookie_params(31536000);
                 session_start(); //Start the session if it doesn't exist
             }
-
             //log in form
             if (isset($_POST['login-submit'])) {
 
@@ -101,6 +99,31 @@
                     //check if the query is executed
                     if (mysqli_query($connection, $sql)) {
                         echo "aanmelding gelukt!";
+
+                        //get the userID of the user
+                        $sql2 = "SELECT id FROM login WHERE username='$username'";
+                        $result2 = mysqli_query($connection, $sql2);
+                        $row = mysqli_fetch_assoc($result2);
+                        $id = $row['id'];
+
+                        //after the query is done execute another query to insert the deafualt colors into the database
+                        $sql2 = "SELECT id FROM login WHERE username='$username'";
+                        $result2 = mysqli_query($connection, $sql2);
+                        $row = mysqli_fetch_assoc($result2);
+                        $id = $row['id'];
+
+                        //after the query is done execute another query to insert the deafualt colors into the database
+                        $sql1 = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES ('', '$id', '#000000', 'Slaap')";
+                        $sql2 = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES ('', '$id', '#04052EFF', 'School')";
+                        $sql3 = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES ('', '$id', '#140152FF', 'Werk')";
+                        $sql4 = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES ('', '$id', '#22007CFF', 'Sport')";
+                        $sql5 = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES ('', '$id', '#0D00A4FF', 'Vrije tijd')";
+
+                        $result1 = mysqli_query($connection, $sql1);
+                        $result2 = mysqli_query($connection, $sql2);
+                        $result3 = mysqli_query($connection, $sql3);
+                        $result4 = mysqli_query($connection, $sql4);
+                        $result5 = mysqli_query($connection, $sql5);
                     } else {
                         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
                     }
