@@ -1,7 +1,27 @@
 body{
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+.main {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    z-index: 99;
+}   
+
+.golf {
+    margin-top: -46vh;
+    z-index: 1;
+}
+
+.golf-1 {
+    margin-bottom: -45vh;
+    z-index: 1;
 }
 
 .main-login-wrapper{
@@ -13,6 +33,11 @@ body{
 
     background-color: var(--federal-blue);
     transition: all 0.3s ease-in-out;
+
+    border-radius: 50px;
+    box-shadow: 0 4px 60px var(--federal-blue);
+    backdrop-filter: blur(14.7px);
+    -webkit-backdrop-filter: blur(14.7px);
 }
 
 .input-sign-up, .login-input{

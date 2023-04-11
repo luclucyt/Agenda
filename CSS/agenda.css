@@ -370,6 +370,7 @@ body{
     display: block;
     border-radius: 10px;
 }
+
 .functie-wrapper{
     background-color: var(--neavy-blue);
     border-radius: 10px;
@@ -381,6 +382,10 @@ body{
     top: 13vh;
 
     height: 55vh;
+    overflow: scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;          /* "auto" or "thin" */
+    scrollbar-color: green white;
 }
 
 .functie-wrapper form{
