@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7129692a-3748-4e85-b864-9768456ccc55" name="Changes" comment="commit">
+      <change afterPath="$PROJECT_DIR$/PHP/settings.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CSS/agenda.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/agenda.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JS/agenda.js" beforeDir="false" afterPath="$PROJECT_DIR$/JS/agenda.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PHP/add_to_agenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/add_to_agenda.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PHP/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PHP/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/login.php" afterDir="false" />
     </list>
@@ -95,7 +94,8 @@
       <workItem from="1681104021588" duration="9392000" />
       <workItem from="1681118467555" duration="7982000" />
       <workItem from="1681140190346" duration="2317000" />
-      <workItem from="1681195846518" duration="2012000" />
+      <workItem from="1681195846518" duration="2931000" />
+      <workItem from="1681204503508" duration="6713000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1680989097683</created>
