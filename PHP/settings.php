@@ -87,9 +87,9 @@
                 $username = $_POST['username'];
                 $email = $_POST['email'];
                 $password = $_POST['password'];
-                $id = $_SESSION['id'];
+                $id = $_SESSION['userID'];
 
-                $sql = "UPDATE users SET username = '$username', email = '$email', password = '$password' WHERE id = '$id'";
+                $sql = "UPDATE login SET username = '$username', email = '$email', password = '$password' WHERE id = '$id'";
                 $result = mysqli_query($connection, $sql);
 
                 if($result) {

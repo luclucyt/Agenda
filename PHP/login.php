@@ -77,17 +77,19 @@
                     $result2 = mysqli_query($connection, $sql2);
                     $row = mysqli_fetch_assoc($result2);
                     $id = $row['id'];
+                    echo $id;
+
+                    $sql = "SELECT email FROM login WHERE username='$username' AND password='$password'";
+                    $result = mysqli_query($connection, $sql);
+                    $row = mysqli_fetch_assoc($result);
+                    if(mysqli_num_rows($result) > 0){
+                        $_SESSION['email'] = $row['email'];
+                    }
 
                     //set the session variable to the id of the user
                     $_SESSION['userID'] = $id;
                     $_SESSION['username'] = $username;
                     $_SESSION['password'] = $password;
-                    $_SESSION['email'] = $row['email'];
-
-                    if(!isset($_SESSION['email'])){
-                        header('login.php');
-                        exit();
-                    }
 
                     //redirect to index.php
                     header("Location: index.php");
