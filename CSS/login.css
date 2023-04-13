@@ -24,14 +24,10 @@ body{
 .golf-1 {
     margin-bottom: -45vh;
     z-index: 1;
-
-
-    /*position: fixed;*/
-    /*bottom: 0;*/
 }
 
-.main-login-wrapper{
-    padding: 0.5% 5% 0.5% 2.5%;
+.main-login-wrapper {
+    padding: 0.5% 2.5% 0.5% 2.5%;
 
     width: 40%;
 
@@ -46,13 +42,25 @@ body{
 }
 
 .input-sign-up, .login-input{
-    margin: 1% 1% 1% 10%;
-    padding: 2%;
-
-    width: 80%;
-
+    border: none;
+	border-bottom: 2px solid #D1D1D4;
+	background: var(--federal-blue);
+	padding: 10px;
+	padding-left: 1%;
+    margin: 10px;
+	width: 80%;
+    font-size: 20px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+}
+
+.login-input {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 10px;
+}
+
+.fa-solid {
+    font-size: 32px;
 }
 
 .submit-button{
@@ -62,7 +70,7 @@ body{
     width: 30%;
 
     border: none;
-    border-radius: 30px 10px 30px 10px;
+    border-radius: 30px 7px 30px 7px;
 
     background-color: var(--dark-blue);
     transition: all 0.3s ease-in-out;

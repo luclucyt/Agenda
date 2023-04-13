@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../CSS/notebook.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Log in</title>
 
     <!-- CSS -->
@@ -26,8 +27,13 @@
         <div class="signup-wrapper">
             <h1>Registeer:</h1>
             <form method="POST" action="" autocomplete="off">
+                <i class="fa-solid fa-user fa-lg"></i>
                 <input type="text" name="username" placeholder="Gebruikersnaam" class="input-sign-up"><br>
+
+                <i class="fa-solid fa-envelope fa-lg"></i>
                 <input type="email" name="email" placeholder="E-mail" class="input-sign-up"><br>
+
+                <i class="fa-solid fa-lock fa-lg"></i>
                 <input type="password" name="password" placeholder="Wachtwoord" id="password" class="input-sign-up"><br>
 
                 <button type="submit" name="signup-submit" id="submit-button" class="submit-button"><h2>Registreer nu</h2></button>
@@ -37,7 +43,10 @@
         <div class="login-wrapper">
             <h1>Log in:</h1>
             <form method="post" autocomplete="off">
+                <i class="fa-solid fa-user fa-lg"></i>
                 <input type="text" name="username" placeholder="Gebruikersnaam" class="login-input"><br>
+
+                <i class="fa-solid fa-lock fa-lg"></i>
                 <input type="password" name="password" placeholder="Wachtwoord" class="login-input"><br>
 
                 <button type="submit" name="login-submit" class="submit-button"><h2>Log in</h2></button>
