@@ -63,8 +63,6 @@
 
 
                 if (mysqli_num_rows($result) > 0) {
-                    $_SESSION['username'] = $username;
-
                     //after the query is done execute another query to get the id of the user
                     $sql2 = "SELECT id FROM login WHERE username='$username' AND password='$password'";
                     $result2 = mysqli_query($connection, $sql2);
@@ -73,6 +71,14 @@
 
                     //set the session variable to the id of the user
                     $_SESSION['userID'] = $id;
+                    $_SESSION['username'] = $username;
+                    $_SESSION['password'] = $password;
+                    $_SESSION['email'] = $row['email'];
+
+                    if(!isset($_SESSION['email'])){
+                        header('login.php');
+                        exit();
+                    }
 
                     //redirect to index.php
                     header("Location: index.php");
