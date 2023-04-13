@@ -53,7 +53,7 @@
             </form>
         </div>
 
-        <p class="login-toggle">already have an account? Login</p>
+        <p class="login-toggle"></p>
 
         <?php
             //start the session
