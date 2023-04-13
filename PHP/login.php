@@ -83,7 +83,7 @@
                     //redirect to index.php
                     header("Location: index.php");
                 } else {
-                    echo "Wachtwoord of gebruikersnaam verkeerd!";
+                    echo "<h1>Wachtwoord of gebruikersnaam verkeerd!</h1>";
                     $_SESSION['username'] = '';
                 }
             }
