@@ -29,7 +29,7 @@
   height: 100px;
   margin-bottom: 15px;
   border-radius: 3px 3px 0 0;
-  background-image: linear-gradient(rgba(0,0,0,0), #000), linear-gradient(90deg, #fff, currentColor);
+  background-image: linear-gradient(rgba(0,0,0,0), #000), linear-gradient(90deg, #400b0b, currentColor);
   cursor: pointer;
 }
 
