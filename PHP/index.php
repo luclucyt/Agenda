@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../CSS/coloris.min.css">
 
     <!-- JAVA SCRIPT -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../JS/agenda.js" defer></script>
     <script type="text/javascript" src="../JS/coloris.min.js"></script>
 
@@ -41,9 +42,6 @@
             <form method="post" class="log-out-form">
                 <input type="submit" name="logout" value="Log uit" class="log-out">
             </form>
-            <form>
-                <input type="button" value="Settings" class="settings-button" onclick="window.location.href='settings.php'">
-            </form>
         </div>
 
     </div>
@@ -51,13 +49,17 @@
     <div class="functie-wrapper">
         <div class="new-color-wrapper">
             <h4>Nieuwe functie toevoegen:</h4>
-            <form method="POST" action="">
+            <form method="POST" action="index.php">
                 <label for="new-functie">Nieuwe functie:</label>
                 <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
                 <label for="new-color">Nieuwe kleur:</label>
+<<<<<<< Updated upstream
                 <input type="text" data-coloris class="coloris instance1" id="new-color"  value=" #77077d"><br> 
                 <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
+=======
+                <input type="text" data-coloris class="coloris instance2" id="new-color" name="new-color" value=" rgba(255, 0, 0)"><br> 
+>>>>>>> Stashed changes
 
                 <input type="hidden" name="userID" value="<?=  $userID ?>">
 
@@ -103,8 +105,6 @@
                         }
                     ?>
                 </select><br>
-
-                <input type="submit" name="filter-submit" value="Filter" class="filter-submit">
             </form>
         </div>
 
@@ -340,13 +340,20 @@
 
 
 <?php
+
+    //if there was a POST request
+    if($_SERVER ['REQUEST_METHOD'] === 'POST'){
+        echo "<script>alert('test');</script>";
+    }
+
     //if new color is submitted
     if(isset($_POST['new-color-submit'])){
+        echo "<script>alert('test');</script>";
         $newFunction = $_POST['new-functie'];
         $newColor = $_POST['new-color'];
 
         $SQL = "INSERT INTO kleuren (id, userID, functie, kleur) VALUES (NULL, '$userID', '$newFunction', '$newColor')";
-        $result = mysqli_query($connection, $SQL);
+        //$result = mysqli_query($connection, $SQL);
 
         //refresh the page
         echo "<script>window.location.href = 'index.php';</script>";
@@ -456,7 +463,7 @@
                 <div>
                     <input type="text" name="agenda-naam" placeholder="Titel" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>
 
-                    <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving" required oninvalid="this.setCustomValidity('Voer een omschrijving in')" onchange="this.setCustomValidity('')">
+                    <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving">
 
                     <p id="end-start-time">` + start_time + ` - ` + end_time + `</p>
 
@@ -492,7 +499,7 @@
                 </div>
                 <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button></form>`;
 
-            if(start_timeInverted == true){
+            if(start_timeInverted === true){
                 let temp = start_time;
                 start_time = end_time;
                 end_time = temp;
@@ -547,8 +554,6 @@
 
         // format the time value so it can be used in the input field
         let formatted_time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
-
-        //console.log(formatted_time);
 
         return [Math.floor(y / row_height), formatted_time];
     }

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7129692a-3748-4e85-b864-9768456ccc55" name="Changes" comment="commit">
+      <change beforePath="$PROJECT_DIR$/.idea/Agenda.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Agenda.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PHP/add_to_agenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/add_to_agenda.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PHP/connectAgenda.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/connectAgenda.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSS/agenda.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/agenda.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JS/agenda.js" beforeDir="false" afterPath="$PROJECT_DIR$/JS/agenda.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PHP/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PHP/settings.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +102,7 @@
       <workItem from="1681331165554" duration="2020000" />
       <workItem from="1681367683727" duration="3637000" />
       <workItem from="1681471285579" duration="33000" />
-      <workItem from="1681473216621" duration="5465000" />
+      <workItem from="1681473216621" duration="13264000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1680989097683</created>
