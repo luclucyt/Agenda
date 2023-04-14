@@ -25,7 +25,7 @@
     <div class="main-login-wrapper">
 
         <div class="signup-wrapper">
-            <h1>Registeer:</h1>
+            <h1>Nieuw hier?</h1>
             <form method="POST" action="" autocomplete="off">
                 <i class="fa-solid fa-user fa-lg"></i>
                 <input type="text" name="username" placeholder="Gebruikersnaam" class="input-sign-up"><br>
@@ -43,11 +43,11 @@
         <div class="login-wrapper">
             <h1>Log in:</h1>
             <form method="post" autocomplete="off">
-                <i class="fa-solid fa-user fa-lg"></i>
-                <input type="text" name="username" placeholder="Gebruikersnaam" class="login-input"><br>
+                <i class="fa-solid fa-user fa-lg"></i> 
+                <input type="text" name="username" placeholder="Gebruikersnaam" class="login-input">
 
                 <i class="fa-solid fa-lock fa-lg"></i>
-                <input type="password" name="password" placeholder="Wachtwoord" class="login-input"><br>
+                <input type="password" name="password" placeholder="Wachtwoord" class="login-input">
 
                 <button type="submit" name="login-submit" class="submit-button"><h2>Log in</h2></button>
             </form>
