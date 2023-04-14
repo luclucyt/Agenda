@@ -296,6 +296,7 @@
                     $agenda_item_functie = $row['functie'];
                     $agenda_item_kleur = $row['kleur'];
 
+
                     echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_functie}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
                         echo "<h1 class='agenda-item-header'>{$agenda_item_naam}</h1>";
                         echo "<p class='agenda-item-omschrijving'>{$agenda_item_omschrijving}</p>";

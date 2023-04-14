@@ -7,7 +7,7 @@
     $userID = $_SESSION['userID'];
 
 
-    if(isset($_POST['agenda-submit'])){
+    if(isset($_POST['agenda-submit'])) {
         //connect to the database
         require_once "connectAgenda.php";
 
@@ -22,22 +22,22 @@
         $agenda_kleur = $_POST['agenda-kleur'];
 
         //round the start and end time to the nearest 15 minutes
-        $agenda_start_tijd = date("H:i", round(strtotime($agenda_start_tijd) / 900 ) * 900);
-        $agenda_eind_tijd = date("H:i", round(strtotime($agenda_eind_tijd) / 900 ) * 900);
+        $agenda_start_tijd = date("H:i", round(strtotime($agenda_start_tijd) / 900) * 900);
+        $agenda_eind_tijd = date("H:i", round(strtotime($agenda_eind_tijd) / 900) * 900);
 
         //if the end time is before the start time, invert the start and end time
-        if($agenda_start_tijd > $agenda_eind_tijd){
+        if ($agenda_start_tijd > $agenda_eind_tijd) {
             $agenda_start_tijd = $_POST['agenda-eind-tijd'];
             $agenda_eind_tijd = $_POST['agenda-start-tijd'];
         }
 
         //if the start time is the same as the end time, set the end time to 15 minutes later
-        if($agenda_start_tijd == $agenda_eind_datum){
+        if ($agenda_start_tijd == $agenda_eind_datum) {
             $agenda_eindDatum = date("H:i", strtotime($agenda_eind_tijd) + 900);
         }
 
         //if the end time is 00:00, set the end time to 23:59
-        if($agenda_eind_tijd == "00:00"){
+        if ($agenda_eind_tijd == "00:00") {
             $agenda_eind_tijd = "23:59";
         }
 
@@ -57,5 +57,4 @@
 
         //run the query in the database
         $result = mysqli_query($connection, $sqlAgenda);
-
     }
