@@ -407,6 +407,7 @@ body{
 }
 
 #new-color{
+    border-radius: 10px;
     width: 90%;
     height: 50px;
     border: 1px solid var(--text);
