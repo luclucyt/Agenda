@@ -384,8 +384,8 @@ body{
     height: 55vh;
     overflow: scroll;
     overflow-x: hidden;
-    scrollbar-width: thin;          /* "auto" or "thin" */
-    scrollbar-color: green white;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(13, 181, 167) var(--neavy-blue);
 }
 
 .functie-wrapper form{

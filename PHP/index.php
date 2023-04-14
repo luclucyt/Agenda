@@ -6,13 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../CSS/notebook.png">
     <title>Agenda</title>
-
+    
     <!-- CSS -->
     <link rel="stylesheet" href="../CSS/root.css">
     <link rel="stylesheet" href="../CSS/agenda.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/coloris.min.css">
 
     <!-- JAVA SCRIPT -->
     <script src="../JS/agenda.js" defer></script>
+    <script type="text/javascript" src="../JS/coloris.min.js"></script>
 
 </head>
 <body>
@@ -54,7 +56,8 @@
                 <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
                 <label for="new-color">Nieuwe kleur:</label>
-                <input type="color" id="new-color" name="new-color" placeholder="Nieuwe kleur"><br>
+                <input type="text" data-coloris class="coloris instance1" value="rgba(255, 0, 0)"><br> 
+                <!-- <input type="color" data-coloris="" id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
 
                 <input type="hidden" name="userID" value="<?=  $userID ?>">
 
