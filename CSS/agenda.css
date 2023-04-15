@@ -1,12 +1,18 @@
 body{
     overflow: hidden;
+    margin: 0;
 }
 
 .header{
-    width: 100%;
+
+    width: 94vw;
     display: flex;
 
     justify-content: space-between;
+
+     padding: 0 5vw 0 5vw;
+
+    background-color: var(--neavy-blue);
 }
 
 .header div{
@@ -170,7 +176,7 @@ body{
 .time-line{
      width: 82vw;
      position: absolute;
-     left: 0;
+     left: 90px;
      top: 0;
      height: 1px;
      opacity: 0.75;
@@ -178,6 +184,12 @@ body{
 
      z-index: -1;
  }
+
+.time-header{
+    position: relative;
+    left: 40px;
+    top: -10px;
+}
 
 /* agenda items */
 .agenda-date0{grid-column: 1;}
@@ -300,10 +312,7 @@ body{
 /* agenda filer */
 .agenda-filter-wrapper{
     background-color: var(--neavy-blue);
-    width: 12vw;
-
-    position: fixed;
-    top: 73vh;
+    width: 100%;
 
     padding: 1%;
     border-radius: 10px;
@@ -363,17 +372,17 @@ body{
     background-color: var(--neavy-blue);
     border-radius: 10px;
 
-    width: fit-content;
+    width: 100%;
     padding: 1%;
 
-    position: fixed;
-    top: 13vh;
 
     height: 55vh;
     overflow: scroll;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgb(13, 181, 167) var(--neavy-blue);
+
+    box-sizing: border-box;
 }
 
 .functie-wrapper form{
@@ -430,12 +439,9 @@ body{
     background-color: var(--neavy-blue);
     border-radius: 10px;
 
-    width: fit-content;
     padding: 1%;
 
-    position: fixed;
-    top: 50vh;
-
+    width: 100%;
     height: fit-content;
 }
 
@@ -470,4 +476,20 @@ body{
 .remove-color-submit:hover{
     background: var(--text);
     color: var(--oxford-blue);
+}
+
+.view-wrapper {
+    background-color: black;
+    width: 15vw;
+    height: 80vh;
+
+    position: fixed;
+
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }

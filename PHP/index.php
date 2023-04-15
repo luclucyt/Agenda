@@ -36,7 +36,7 @@
     <?php include 'connectAgenda.php'; ?>
 
     <div class="header">
-        <h1>Agenda:</h1>
+        <h1>Welkom <?= $_SESSION['username'] ?>, <?= $_SESSION['userID'] ?>:</h1>
 
         <div>
             <form method="post" class="log-out-form">
@@ -46,69 +46,70 @@
 
     </div>
 
-    <div class="functie-wrapper">
-        <div class="new-color-wrapper">
-            <h4>Nieuwe functie toevoegen:</h4>
-            <form method="POST" action="index.php">
-                <label for="new-functie">Nieuwe functie:</label>
-                <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
+    <section class="view-wrapper">
+        <div class="functie-wrapper">
 
-                <label for="new-color">Nieuwe kleur:</label>
-<<<<<<< Updated upstream
-                <input type="text" data-coloris class="coloris instance1" id="new-color"  value=" #77077d"><br> 
-                <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
-=======
-                <input type="text" data-coloris class="coloris instance2" id="new-color" name="new-color" value=" rgba(255, 0, 0)"><br> 
->>>>>>> Stashed changes
+                <div class="new-color-wrapper">
+                <h4>Nieuwe functie toevoegen:</h4>
+                <form method="POST" action="index.php">
+                    <label for="new-functie">Nieuwe functie:</label>
+                    <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
-                <input type="hidden" name="userID" value="<?=  $userID ?>">
+                    <label for="new-color">Nieuwe kleur:</label>
+                    <input type="text" data-coloris class="coloris instance1" id="new-color"  value=" #77077d"><br>
+                    <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
 
-                <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
-            </form>
-        </div>
-        <div class="functie-line"></div>
-        <div class="remove-color-wrapper">
-            <h4>Functie verwijderen:</h4>
-            <form method="POST" action="">
-                <input type="hidden" name="userID" value="<?=  $userID ?>">
+                    <input type="hidden" name="userID" value="<?=  $userID ?>">
 
-                <label for="remove-functie">Verwijder functie:</label><br>
-                <select name="remove-color-select" id="remove-color-select">
-                    <?php
-                        $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
-                        $removeColorResult = mysqli_query($connection, $removeColorQuery);
-                        while($row = mysqli_fetch_assoc($removeColorResult)) {
-                            $id = $row['id'];
-                            $functie = $row['functie'];
-                            echo "<option value='$id'>$functie</option>";
-                        }
-                    ?>
-                </select><br>
-                <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
-            </form>
-        </div>
-    </div>
+                    <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
+                </form>
+            </div>
+            <div class="functie-line"></div>
+            <div class="remove-color-wrapper">
+                <h4>Functie verwijderen:</h4>
+                <form method="POST" action="">
+                    <input type="hidden" name="userID" value="<?=  $userID ?>">
 
-    <div class="agenda-filter-wrapper">
-        <div class="filter-wrapper">
-            <h4>Filter:</h4>
-            <form method="POST" action="">
-                <select name="filter-functie" id="filter-functie">
-                    <option value="0">Geen filter</option>
-                    <?php
-                        $filterQuery = "SELECT * FROM kleuren WHERE userID = $userID";
-                        $filterResult = mysqli_query($connection, $filterQuery);
-                        while($row = mysqli_fetch_assoc($filterResult)) {
-                            $id = $row['kleur'];
-                            $functie = $row['functie'];
-                            echo "<option value='$id'>$functie</option>";
-                        }
-                    ?>
-                </select><br>
-            </form>
+                    <label for="remove-functie">Verwijder functie:</label><br>
+                    <select name="remove-color-select" id="remove-color-select">
+                        <?php
+                            $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                            $removeColorResult = mysqli_query($connection, $removeColorQuery);
+                            while($row = mysqli_fetch_assoc($removeColorResult)) {
+                                $id = $row['id'];
+                                $functie = $row['functie'];
+                                echo "<option value='$id'>$functie</option>";
+                            }
+                        ?>
+                    </select><br>
+                    <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
+                </form>
+            </div>
         </div>
 
-    </div>
+        <div class="agenda-filter-wrapper">
+            <div class="filter-wrapper">
+                <h4>Filter:</h4>
+                <form method="POST" action="">
+                    <select name="filter-functie" id="filter-functie">
+                        <option value="0">Geen filter</option>
+                        <?php
+                            $filterQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                            $filterResult = mysqli_query($connection, $filterQuery);
+                            while($row = mysqli_fetch_assoc($filterResult)) {
+                                $id = $row['kleur'];
+                                $functie = $row['functie'];
+                                echo "<option value='$id'>$functie</option>";
+                            }
+                        ?>
+                    </select><br>
+                </form>
+            </div>
+        </div>
+
+        <section class="agenda-hide-wrapper">
+        </section>
+    </section>
 
     <script>
         document.getElementById('filter-functie').addEventListener('input', function (){
@@ -206,11 +207,6 @@
         }
 
         echo "<input type='hidden' id='week_start' value='$week_start'>";
-
-        // Query the database for all agenda items within the current week range
-        $sqlAgenda = "SELECT * FROM agenda WHERE startDatum >= '$week_start' AND eindDatum <= '$week_end'";
-        $result = mysqli_query($connection, $sqlAgenda);
-        $resultCheck = mysqli_num_rows($result);
     ?>
     <div class="main-main-agenda-wrapper">
 
@@ -269,50 +265,90 @@
                 <?php } ?>
             </div>
         <?php
-            if($resultCheck > 0){
 
-                while($row = mysqli_fetch_assoc($result)){
+            // Query id the user is authorized to view the agenda
+            $sqlAccess = "SELECT * FROM access WHERE userID = '$userID'";
+            $resultAccess = mysqli_query($connection, $sqlAccess);
+            $resultCheckAccess = mysqli_num_rows($resultAccess);
 
-                    //calculate the difference in days between the start date and the week start date
-                    $start = new DateTime($row['startDatum']);
-                    $end = new DateTime($week_start);
-                    $dayDifference = $start->diff($end)->format("%a");
+            if($resultCheckAccess > 0) {
+                while ($accessRow = mysqli_fetch_assoc($resultAccess)) {
 
-                    //remove the seconds from the start time and end time
-                    $row['startTijd'] = substr($row['startTijd'], 0, -3);
-                    $row['eindTijd'] = substr($row['eindTijd'], 0, -3);
+                    $userID = $accessRow['accesUserID'];
 
-                    //calculate the gird row start and end position of the event based on the start and end time when every 15 minutes is 1 row (there are 168 rows in the grid)
-                    $startRow = floor(((strtotime($row['startTijd']) - strtotime('00:00')) / 900) + 1);
-                    $endRow = floor(((strtotime($row['eindTijd']) - strtotime('00:00')) / 900) + 1);
+                    // Query the database for all agenda items within the current week range
+                    $sqlAgenda = "SELECT * FROM agenda WHERE (startDatum >= '$week_start' AND eindDatum <= '$week_end') AND userID = '$userID'";
+                    $result = mysqli_query($connection, $sqlAgenda);
+                    $resultCheck = mysqli_num_rows($result);
 
-                    //put the values in a variable
-                    $agenda_item_id1 = $row['id'];
-                    $agenda_item_naam = $row['naam'];
-                    $agenda_item_omschrijving = $row['omschrijving'];
-                    $agenda_item_startDatum = $row['startDatum'];
-                    $agenda_item_startTijd = $row['startTijd'];
-                    $agenda_item_eindTijd = $row['eindTijd'];
-                    $agenda_item_functie = $row['functie'];
-                    $agenda_item_kleur = $row['kleur'];
+                    if ($resultCheck > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+
+                            //calculate the difference in days between the start date and the week start date
+                            $start = new DateTime($row['startDatum']);
+                            $end = new DateTime($week_start);
+                            $dayDifference = $start->diff($end)->format("%a");
+
+                            //remove the seconds from the start time and end time
+                            $row['startTijd'] = substr($row['startTijd'], 0, -3);
+                            $row['eindTijd'] = substr($row['eindTijd'], 0, -3);
+
+                            //calculate the gird row start and end position of the event based on the start and end time when every 15 minutes is 1 row (there are 168 rows in the grid)
+                            $startRow = floor(((strtotime($row['startTijd']) - strtotime('00:00')) / 900) + 1);
+                            $endRow = floor(((strtotime($row['eindTijd']) - strtotime('00:00')) / 900) + 1);
+
+                            //put the values in a variable
+                            $agenda_item_id1 = $row['id'];
+                            $agenda_item_naam = $row['naam'];
+                            $agenda_item_omschrijving = $row['omschrijving'];
+                            $agenda_item_startDatum = $row['startDatum'];
+                            $agenda_item_startTijd = $row['startTijd'];
+                            $agenda_item_eindTijd = $row['eindTijd'];
+                            $agenda_item_functie = $row['functie'];
+                            $agenda_item_kleur = $row['kleur'];
 
 
-                    echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_functie}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
-                        echo "<h1 class='agenda-item-header'>{$agenda_item_naam}</h1>";
-                        echo "<p class='agenda-item-omschrijving'>{$agenda_item_omschrijving}</p>";
-                        echo "<p>{$agenda_item_startTijd} - {$agenda_item_eindTijd}</p>";
+                            echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie} userID{$userID}' id='agendaID{$agenda_item_id1}' style='background-color:{$agenda_item_functie}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
+                            echo "<h1 class='agenda-item-header'>{$agenda_item_naam}</h1>";
+                            echo "<p class='agenda-item-omschrijving'>{$agenda_item_omschrijving}</p>";
+                            echo "<p>{$agenda_item_startTijd} - {$agenda_item_eindTijd}</p>";
 
-                        echo "<div class='agenda-form-wrapper'>";
-                            //delete button
-                            echo "<form method='POST' action='index.php'>";
-                                echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
-                                echo "<button type='submit' name='agenda-delete' class='agenda-delete'>Verwijder</button>";
-                            echo "</form>";
-                        echo "</div>";
+                            echo "<div class='agenda-form-wrapper'>";
 
-                    //close the agenda item
-                    echo "</div>";
+                            //check if the user is the owner of the agenda item
+                            if($userID == $_SESSION['userID']) {
+                                //delete button
+                                echo "<form method='POST' action='index.php'>";
+                                    echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
+                                    echo "<button type='submit' name='agenda-delete' class='agenda-delete'>Verwijder</button>";
+                                echo "</form>";
+                            }
+                            echo "</div>";
+
+                            //close the agenda item
+                            echo "</div>";
+
+                        }
+                    }
+
+                    $sql = "SELECT * FROM login WHERE ID = '$userID'";
+                    $result = mysqli_query($connection, $sql);
+                    $resultCheck = mysqli_num_rows($result);
+                    if($resultCheck > 0){
+                        while ($rowUsers = mysqli_fetch_assoc($result)) {
+                            $user = $rowUsers['username'];
+                            $ID = $rowUsers['id'];
+
+                            echo "<script>document.getElementsByClassName('agenda-hide-wrapper')[0].innerHTML += `<label for='{$user}'>{$user}</label><input type='checkbox' value='userID{$ID}' name'{$user}' checked class='agenda-view-users'><br>`</script>";
+                        }
+                    }
+
+
+                    $userID = $_SESSION['userID'];
+
+
                 }
+
             }
             //close the agenda container
             echo "</div>";
@@ -343,12 +379,12 @@
 
     //if there was a POST request
     if($_SERVER ['REQUEST_METHOD'] === 'POST'){
-        echo "<script>alert('test');</script>";
+        echo "<script>alert('POST worked');</script>";
     }
 
     //if new color is submitted
     if(isset($_POST['new-color-submit'])){
-        echo "<script>alert('test');</script>";
+        echo "<script>alert('uwu');</script>";
         $newFunction = $_POST['new-functie'];
         $newColor = $_POST['new-color'];
 
@@ -357,7 +393,7 @@
 
         //refresh the page
         echo "<script>window.location.href = 'index.php';</script>";
-    }
+   }
 
     //if color is deleted
     if(isset($_POST['remove-color-submit'])){
@@ -508,7 +544,6 @@
             }
 
             document.getElementById('agenda-naam').addEventListener('input', function(event){
-
                 let input = event.target.value;
                 input = input.charAt(0).toUpperCase() + input.slice(1);
                 console.log(input);
@@ -574,7 +609,5 @@
         let rect = gridWrapper.getBoundingClientRect();
         let x = event.clientX + gridWrapper.scrollLeft - rect.left;
         let y = event.clientY + gridWrapper.scrollTop - rect.top;
-        
-        console.log("Relative position: (" + x + ", " + y + ")");
     });
 </script>

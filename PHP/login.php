@@ -145,6 +145,10 @@
                         $result3 = mysqli_query($connection, $sql3);
                         $result4 = mysqli_query($connection, $sql4);
                         $result5 = mysqli_query($connection, $sql5);
+
+
+                        $sql1 = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$id', '$id')";
+                        $result1 = mysqli_query($connection, $sql1);
                     } else {
                         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
                     }
