@@ -10,14 +10,15 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../CSS/root.css">
     <link rel="stylesheet" href="../CSS/agenda.css">
-    <link rel="stylesheet" type="text/css" href="../CSS/coloris.min.css">
+    <link rel="stylesheet" href="../CSS/coloris.min.css">
 
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="../JS/agenda.js" defer></script>
-    <script type="text/javascript" src="../JS/coloris.min.js"></script>
+    <script src="../JS/coloris.min.js"></script>
 
+    <script src="../JS/agenda.js" defer></script>
 </head>
+
 <body>
     <?php
         //start the session
@@ -36,14 +37,100 @@
     <?php include 'connectAgenda.php'; ?>
 
     <div class="header">
-        <h1>Welkom <?= $_SESSION['username'] ?>, <?= $_SESSION['userID'] ?>:</h1>
+        <div class="left-side-header" ">
+            <h1>Welkom <?= $_SESSION['username'] ?>,</h1>
 
-        <div>
-            <form method="post" class="log-out-form">
-                <input type="submit" name="logout" value="Log uit" class="log-out">
+            <?php
+
+                // Get the current week start and end dates if they are not already set
+                if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
+                    // Get the current date
+                    $date = date('Y-m-d');
+
+                    // Get the current week day
+                    $current_week_day = date('N', strtotime($date));
+
+                    // Get the start date of the week
+                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+
+                    // Get the end date of the week
+                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+
+                    // Set the session variables
+                    $_SESSION['week_start'] = $week_start;
+                    $_SESSION['week_end'] = $week_end;
+                }
+
+                //get the current week number (via $_SESSION['week_start'])
+                $week_start = $_SESSION['week_start'];
+
+                if(isset($_POST['this_week'])){
+                    //set it to the current week
+                    $date = date('Y-m-d');
+
+                    // Get the current week day
+                    $current_week_day = date('N', strtotime($date));
+
+                    // Get the start date of the week
+                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+
+                }
+
+                if(isset($_POST['prev_week'])){
+                    //set it to the previous week
+                    $week_start = date('Y-m-d', strtotime('-1 week', strtotime($week_start)));
+                }
+
+                if(isset($_POST['next_week'])){
+                    $week_start = date('Y-m-d', strtotime('+1 week', strtotime($week_start)));
+                }
+
+                //get the week number of the current week
+                $week_number = date('W', strtotime($week_start));
+
+                //get the month of the current week
+                $month = date('F', strtotime($week_start));
+
+                if($month == "January") $month = "Januari";
+                if($month == "February") $month = "Februari";
+                if($month == "March") $month = "Maart";
+                if($month == "April") $month = "April";
+                if($month == "May") $month = "Mei";
+                if($month == "June") $month = "Juni";
+                if($month == "July") $month = "Juli";
+                if($month == "August") $month = "Augustus";
+                if($month == "September") $month = "September";
+                if($month == "October") $month = "Oktober";
+                if($month == "November") $month = "November";
+                if($month == "December") $month = "December";
+
+                //get the year of the current week
+                $year = date('Y', strtotime($week_start));
+
+                echo "<h3>$month $year, week $week_number</h3>";
+            ?>
+
+            <form method="post" class="week-buttons">
+                <input type="submit" name="this_week" value="Vandaag" class="this-week">
+                <div class="change-weekBTN">
+                    <input type="submit" name="prev_week" value="<" class="week-button">
+                    <input type="submit" name="next_week" value=">" class="week-button">
+                </div>
             </form>
         </div>
 
+
+        <div class="right-side-header">
+            <form method="post" class="log-out-form">
+                <input type="submit" name="logout" value="Log uit" class="log-out">
+            </form>
+            <form method="post" class="settings-form-wrapper">
+                <input type="submit" name="settings-form" value="Instellingen" class="settings-from">
+            </form>
+            <form method="post" class="share-form">
+                <input type="submit" name="share-form" value="Deel" class="share-from">
+            </form>
+        </div>
     </div>
 
     <section class="view-wrapper">
@@ -56,8 +143,7 @@
                     <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
                     <label for="new-color">Nieuwe kleur:</label>
-                    <input type="text" data-coloris class="coloris instance1" id="new-color"  value=" #77077d"><br>
-                    <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
+                    <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
 
                     <input type="hidden" name="userID" value="<?=  $userID ?>">
 
@@ -136,11 +222,7 @@
         });
     </script>
 
-    <form method="post" class="week-buttons">
-         <input type="submit" name="prev_week" value="Vorige week" class="week-button">
-         <input type="submit" name="this_week" value="Deze week" class="week-button">
-         <input type="submit" name="next_week" value="Volgende week" class="week-button">
-    </form>
+
 
     <?php include 'add_to_agenda.php'; ?>
 
@@ -254,6 +336,7 @@
         </div>
 
         <div class='agenda-grid-wrapper'>
+            <script>document.getElementsByClassName('main-main-agenda-wrapper')[0].scrollTop = 500</script>
             <div class="agenda-times">
                 <?php
                 for($i = 0; $i <= 23; $i++){
@@ -342,11 +425,7 @@
                             echo "<script>document.getElementsByClassName('agenda-hide-wrapper')[0].innerHTML += `<label for='{$user}'>{$user}</label><input type='checkbox' value='userID{$ID}' name'{$user}' checked class='agenda-view-users'><br>`</script>";
                         }
                     }
-
-
                     $userID = $_SESSION['userID'];
-
-
                 }
 
             }
@@ -376,20 +455,16 @@
 
 
 <?php
-
-    //if there was a POST request
-    if($_SERVER ['REQUEST_METHOD'] === 'POST'){
-        echo "<script>alert('POST worked');</script>";
-    }
-
     //if new color is submitted
     if(isset($_POST['new-color-submit'])){
-        echo "<script>alert('uwu');</script>";
         $newFunction = $_POST['new-functie'];
         $newColor = $_POST['new-color'];
 
-        $SQL = "INSERT INTO kleuren (id, userID, functie, kleur) VALUES (NULL, '$userID', '$newFunction', '$newColor')";
-        //$result = mysqli_query($connection, $SQL);
+        echo "<script>alert('{$newFunction}');</script>";
+        echo "<script>alert('{$newColor}');</script>";
+
+        $SQL = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES (NULL, '$userID', '$newColor', '$newFunction')";
+        $result = mysqli_query($connection, $SQL);
 
         //refresh the page
         echo "<script>window.location.href = 'index.php';</script>";
