@@ -124,7 +124,7 @@ body{
     margin-left: 10px;
 }
 
-.share-from{
+.share-input{
     width: 150px;
     height: 50px;
     line-height: 50px;
@@ -136,6 +136,11 @@ body{
     transition: all 0.3s ease-in-out;
     margin-top: 10px;
     margin-left: 10px;
+}
+
+.share-input:hover, .settings-from:hover{
+    background: var(--text);
+    color: var(--oxford-blue);
 }
 
 .week-buttons{
@@ -152,6 +157,78 @@ body{
     align-items: center;
     width: 30%;
 }
+
+.share-wrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.share-from-wrapper{
+    width: 50%;
+    height: 50%;
+    background: var(--oxford-blue);
+    border-radius: 10px;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.share-from-wrapper{
+    width: 50%;
+    height: 50%;
+    background: var(--oxford-blue);
+    border-radius: 10px;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.share-main-form-input, .share-main-form-submit{
+    width: 90%;
+    height: 50px;
+    background-color: var(--oxford-blue);
+
+    border-radius: 10px;
+    padding: 0 5%;
+}
+
+.share-main-form-input{
+    border: 1px solid var(--text);
+    color: var(--text);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.share-main-form-submit{
+    border: 1px solid var(--text);
+    color: var(--text);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    width: 100%;
+
+    position: absolute;
+    bottom: 0;
+}
+.share-main-form-submit:hover{
+    background: var(--text);
+    color: var(--oxford-blue);
+}
+
 .this-week{
     width: fit-content;
     height: 50px;

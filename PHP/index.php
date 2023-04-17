@@ -94,15 +94,11 @@
                 if($month == "January") $month = "Januari";
                 if($month == "February") $month = "Februari";
                 if($month == "March") $month = "Maart";
-                if($month == "April") $month = "April";
                 if($month == "May") $month = "Mei";
                 if($month == "June") $month = "Juni";
                 if($month == "July") $month = "Juli";
                 if($month == "August") $month = "Augustus";
-                if($month == "September") $month = "September";
                 if($month == "October") $month = "Oktober";
-                if($month == "November") $month = "November";
-                if($month == "December") $month = "December";
 
                 //get the year of the current week
                 $year = date('Y', strtotime($week_start));
@@ -127,11 +123,75 @@
             <form method="post" class="settings-form-wrapper">
                 <input type="submit" name="settings-form" value="Instellingen" class="settings-from">
             </form>
-            <form method="post" class="share-form">
-                <input type="submit" name="share-form" value="Deel" class="share-from">
+            <input type="button" name="share-input" value="Deel" class="share-input">
+        </div>
+    </div>
+
+    <!-- share form -->
+    <div class="share-wrapper">
+        <div class="share-from-wrapper">
+            <form action="" method="POST" autocomplete="off" style="height: 100%; width: 100%; position: relative">
+                <input type="text" placeholder="Gebruikersnaam" class="share-main-form-input" name="share-main-form">
+                <div id="result"></div>
+                <input type="submit" value="Deel" class="share-main-form-submit" name="share-from-submit">
             </form>
         </div>
     </div>
+
+    <?php
+        if(isset($_POST['shareInputValue'])){
+            $shareInputValue = $_POST['shareInputValue'];
+        ?>
+            <div class='reponesForHTML'>
+                <?php
+                    if($shareInputValue !== "") {
+                        $sql = "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
+                        $resultShare = mysqli_query($connection, $sql);
+
+                        $resultCheck = mysqli_num_rows($resultShare);
+
+                        if ($resultCheck > 0) {
+                            while ($row = mysqli_fetch_assoc($resultShare)) {
+                                $shareUserID = $row['username'];
+                                echo "<div class='share-user-wrapper' onclick='updateShare(`$shareUserID`)'><p class='share-user'>$shareUserID</p></div>";
+                            }
+                        }
+                    }
+                ?>
+            </div>
+        <?php
+        }
+
+        if(isset($_POST['share-from-submit'])){
+            $shareUsername = $_POST['share-main-form'];
+            $shareUserID = $_SESSION['userID'];
+
+            $slqAlreadyShared = "SELECT * FROM access WHERE accesUserID = '$shareUserID'";
+            $resultAlreadyShared = mysqli_query($connection, $slqAlreadyShared);
+            $resultCheckAlreadyShared = mysqli_num_rows($resultAlreadyShared);
+
+            //if the user is already shared with the user it wants to share with
+            if($resultCheckAlreadyShared > 0){
+                echo "<script>alert('Deze gebruiker heeft al toegang tot jouw agenda')</script>";
+            }else{
+
+                $sql = "SELECT * FROM login WHERE username = '$shareUsername'";
+                $resultShare = mysqli_query($connection, $sql);
+
+                $resultCheck = mysqli_num_rows($resultShare);
+
+                if($resultCheck > 0){
+                    while($row = mysqli_fetch_assoc($resultShare)) {
+                        $shareUserID = $row['id'];
+                        echo "<script>alert('{$shareUserID}')</script>";
+
+                        $sql = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
+                        $result = mysqli_query($connection, $sql);
+                    }
+                }
+            }
+        }
+    ?>
 
     <section class="view-wrapper">
         <div class="functie-wrapper">
@@ -200,7 +260,7 @@
     <script>
         document.getElementById('filter-functie').addEventListener('input', function (){
             //if there is a filter, hide all agenda items that don't have the same class as the filter
-            if(this.value != 0) {
+            if(this.value !== 0) {
                 let agendaItems = document.querySelectorAll('.agenda-item');
                 for(let i = 0; i < agendaItems.length; i++) {
                     if(agendaItems[i].classList.contains(this.value)) {
@@ -533,7 +593,7 @@
     });
 
     agenda_wrapper.addEventListener('mousemove', function(event) {
-        if(is_dragging == true){
+        if(is_dragging === true){
             //mouse is moving on the agenda and is pressed
             end_row = get_row(event)[0] + 1;
             end_time = get_row(event)[1];
@@ -637,7 +697,7 @@
     });
 
 
-    agenda_wrapper.addEventListener('mouseup', function(event) {
+    agenda_wrapper.addEventListener('mouseup', function() {
         //mouse is not pressed on the agenda anymore
         is_dragging = false;
 
@@ -678,11 +738,39 @@
 
         return [Math.floor(x / colom_width), day_offset];
     }
+</script>
 
-    let gridWrapper = document.getElementsByClassName("agenda-grid-wrapper")[0];
-    gridWrapper.addEventListener('mousemove', function(event) {
-        let rect = gridWrapper.getBoundingClientRect();
-        let x = event.clientX + gridWrapper.scrollLeft - rect.left;
-        let y = event.clientY + gridWrapper.scrollTop - rect.top;
+
+<script>
+    let isOpen = true;
+    toggleShareWrapper();
+
+
+    document.getElementsByClassName("share-input")[0].addEventListener('click', function(event) {
+        toggleShareWrapper();
     });
+
+    document.getElementsByClassName("share-wrapper")[0].addEventListener('click', function(event) {
+        //if it is not any of the children of the share-wrapper
+        if(event.target === this) {
+            toggleShareWrapper();
+        }
+    });
+
+    function toggleShareWrapper() {
+        let shareWrapper = document.getElementsByClassName("share-wrapper")[0];
+        if(isOpen === false){
+            shareWrapper.style.width = "100%";
+            shareWrapper.style.height = "100%";
+            shareWrapper.style.display = "flex";
+            shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            isOpen = true;
+        }else{
+            shareWrapper.style.width = "0%";
+            shareWrapper.style.height = "0%";
+            shareWrapper.style.display = "none";
+            shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0)";
+            isOpen = false;
+        }
+    }
 </script>
