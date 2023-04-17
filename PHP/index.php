@@ -1,139 +1,75 @@
 <!doctype html>
+<?php
+    if (session_status() == PHP_SESSION_NONE) {
+        session_set_cookie_params(31536000);
+        session_start();
+    }
+    //if the user is not logged in, redirect to the login page
+    if($_SESSION['username'] == '') {
+        header("Location: login.php");
+        exit();
+    }
+    $userID = $_SESSION['userID'];
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="../CSS/notebook.png">
+
     <title>Agenda</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../CSS/root.css">
-    <link rel="stylesheet" href="../CSS/agenda.css">
     <link rel="stylesheet" href="../CSS/coloris.min.css">
+    <link rel="stylesheet" href="../CSS/root.css">
+
+    <link rel="stylesheet" href="../CSS/Agenda/agenda.css">
+    <link rel="stylesheet" href="../CSS/Agenda/header.css">
 
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../JS/coloris.min.js"></script>
-
     <script src="../JS/agenda.js" defer></script>
 </head>
 
 <body>
-    <?php
-        //start the session
-        if (session_status() == PHP_SESSION_NONE) {
-            session_set_cookie_params(31536000);
-            session_start(); //Start the session if it doesn't exist
-        }
+    <?php include 'connectDatabase.php'; ?>
 
-        //if the user is not logged in, redirect to the login page
-        if($_SESSION['username'] == '') {
-            header("Location: login.php");
-            exit();
-        }
-        $userID = $_SESSION['userID'];
-    ?>
-    <?php include 'connectAgenda.php'; ?>
-
-    <div class="header">
-        <div class="left-side-header" ">
+    <section class="header">
+        <div class="left-side-header">
             <h1>Welkom <?= $_SESSION['username'] ?>,</h1>
 
-            <?php
+            <?php displayWeekDateHeader(); ?>
 
-                // Get the current week start and end dates if they are not already set
-                if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
-                    // Get the current date
-                    $date = date('Y-m-d');
-
-                    // Get the current week day
-                    $current_week_day = date('N', strtotime($date));
-
-                    // Get the start date of the week
-                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-
-                    // Get the end date of the week
-                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
-
-                    // Set the session variables
-                    $_SESSION['week_start'] = $week_start;
-                    $_SESSION['week_end'] = $week_end;
-                }
-
-                //get the current week number (via $_SESSION['week_start'])
-                $week_start = $_SESSION['week_start'];
-
-                if(isset($_POST['this_week'])){
-                    //set it to the current week
-                    $date = date('Y-m-d');
-
-                    // Get the current week day
-                    $current_week_day = date('N', strtotime($date));
-
-                    // Get the start date of the week
-                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-
-                }
-
-                if(isset($_POST['prev_week'])){
-                    //set it to the previous week
-                    $week_start = date('Y-m-d', strtotime('-1 week', strtotime($week_start)));
-                }
-
-                if(isset($_POST['next_week'])){
-                    $week_start = date('Y-m-d', strtotime('+1 week', strtotime($week_start)));
-                }
-
-                //get the week number of the current week
-                $week_number = date('W', strtotime($week_start));
-
-                //get the month of the current week
-                $month = date('F', strtotime($week_start));
-
-                if($month == "January") $month = "Januari";
-                if($month == "February") $month = "Februari";
-                if($month == "March") $month = "Maart";
-                if($month == "May") $month = "Mei";
-                if($month == "June") $month = "Juni";
-                if($month == "July") $month = "Juli";
-                if($month == "August") $month = "Augustus";
-                if($month == "October") $month = "Oktober";
-
-                //get the year of the current week
-                $year = date('Y', strtotime($week_start));
-
-                echo "<h3>$month $year, week $week_number</h3>";
-            ?>
-
-            <form method="post" class="week-buttons">
+            <form method="post" class="week-button-wrapper">
                 <input type="submit" name="this_week" value="Vandaag" class="this-week">
-                <div class="change-weekBTN">
-                    <input type="submit" name="prev_week" value="<" class="week-button">
-                    <input type="submit" name="next_week" value=">" class="week-button">
+                <div class="change-week-wrapper">
+                    <input type="submit" name="prev_week" value="<" class="change-week-button">
+                    <input type="submit" name="next_week" value=">" class="change-week-button">
                 </div>
             </form>
         </div>
-
 
         <div class="right-side-header">
             <form method="post" class="log-out-form">
                 <input type="submit" name="logout" value="Log uit" class="log-out">
             </form>
             <form method="post" class="settings-form-wrapper">
-                <input type="submit" name="settings-form" value="Instellingen" class="settings-from">
+                <input type="submit" name="settings-input" value="Instellingen" class="settings-input">
             </form>
             <input type="button" name="share-input" value="Deel" class="share-input">
         </div>
-    </div>
+    </section>
 
     <!-- share form -->
-    <div class="share-wrapper">
-        <div class="share-from-wrapper">
+    <div class="share-display-wrapper">
+        <div class="share-display-from-wrapper">
             <form action="" method="POST" autocomplete="off" style="height: 100%; width: 100%; position: relative">
-                <input type="text" placeholder="Gebruikersnaam" class="share-main-form-input" name="share-main-form">
+                <input type="text" placeholder="Gebruikersnaam" class="share-display-form-input" name="share-main-form">
                 <div id="result"></div>
-                <input type="submit" value="Deel" class="share-main-form-submit" name="share-from-submit">
+                <input type="submit" value="Deel" class="share-display-form-submit" name="share-from-submit">
             </form>
         </div>
     </div>
@@ -166,16 +102,26 @@
             $shareUsername = $_POST['share-main-form'];
             $shareUserID = $_SESSION['userID'];
 
-            $slqAlreadyShared = "SELECT * FROM access WHERE accesUserID = '$shareUserID'";
+            $sql = "SELECT * FROM login WHERE username = '$shareUsername'";
+            $resultShare = mysqli_query($connection, $sql);
+            $resultShareCheck = mysqli_num_rows($resultShare);
+
+            if ($resultShareCheck > 0) {
+                while ($row = mysqli_fetch_assoc($resultShare)) {
+                    $shareUsername = $row['id'];
+                }
+            }
+
+            echo "<script>alert('{$shareUserID}')</script>";
+            echo "<script>alert('{$shareUsername}')</script>";
+
+            $slqAlreadyShared = "SELECT * FROM access WHERE accesUserID = '$shareUsername' AND userID = '$userID'";
             $resultAlreadyShared = mysqli_query($connection, $slqAlreadyShared);
             $resultCheckAlreadyShared = mysqli_num_rows($resultAlreadyShared);
-
+            echo "<script>console.log(`{$slqAlreadyShared}`)</script>";
             //if the user is already shared with the user it wants to share with
-            if($resultCheckAlreadyShared > 0){
-                echo "<script>alert('Deze gebruiker heeft al toegang tot jouw agenda')</script>";
-            }else{
-
-                $sql = "SELECT * FROM login WHERE username = '$shareUsername'";
+            if(!$resultCheckAlreadyShared > 0){
+                $sql = "SELECT * FROM login WHERE id = '$shareUsername'";
                 $resultShare = mysqli_query($connection, $sql);
 
                 $resultCheck = mysqli_num_rows($resultShare);
@@ -187,6 +133,12 @@
 
                         $sql = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
                         $result = mysqli_query($connection, $sql);
+
+                        if($result){
+                            echo "<script>alert('De gebruiker heeft nu toegang tot jouw agenda')</script>";
+                        }else{
+                            echo "<script>alert('Er is iets fout gegaan')</script>";
+                        }
                     }
                 }
             }
@@ -746,11 +698,11 @@
     toggleShareWrapper();
 
 
-    document.getElementsByClassName("share-input")[0].addEventListener('click', function(event) {
+    document.getElementsByClassName("share-input")[0].addEventListener('click', function() {
         toggleShareWrapper();
     });
 
-    document.getElementsByClassName("share-wrapper")[0].addEventListener('click', function(event) {
+    document.getElementsByClassName("share-display-wrapper")[0].addEventListener('click', function(event) {
         //if it is not any of the children of the share-wrapper
         if(event.target === this) {
             toggleShareWrapper();
@@ -758,7 +710,7 @@
     });
 
     function toggleShareWrapper() {
-        let shareWrapper = document.getElementsByClassName("share-wrapper")[0];
+        let shareWrapper = document.getElementsByClassName("share-display-wrapper")[0];
         if(isOpen === false){
             shareWrapper.style.width = "100%";
             shareWrapper.style.height = "100%";
@@ -774,3 +726,49 @@
         }
     }
 </script>
+
+<?php
+    function displayWeekDateHeader(): void {
+        //set the week start and end date in the session (if not already set)
+        if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
+            $date = date('Y-m-d');
+            $current_week_day = date('N', strtotime($date));
+            $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+            $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+            $_SESSION['week_start'] = $week_start;
+            $_SESSION['week_end'] = $week_end;
+        }
+
+        $week_start = $_SESSION['week_start'];
+
+        //update the week if the user clicks on the buttons
+        if(isset($_POST['this_week'])){
+            $date = date('Y-m-d');
+            $current_week_day = date('N', strtotime($date));
+            $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+        }
+        if(isset($_POST['prev_week'])){
+            $week_start = date('Y-m-d', strtotime('-1 week', strtotime($week_start)));
+        }
+        if(isset($_POST['next_week'])){
+            $week_start = date('Y-m-d', strtotime('+1 week', strtotime($week_start)));
+        }
+
+        $week_number = date('W', strtotime($week_start));
+
+        $month = date('F', strtotime($week_start));
+
+        if($month == "January"){  $month = "Januari"; }
+        if($month == "February"){ $month = "Februari"; }
+        if($month == "March"){    $month = "Maart"; }
+        if($month == "May"){      $month = "Mei"; }
+        if($month == "June"){     $month = "Juni"; }
+        if($month == "July"){     $month = "Juli"; }
+        if($month == "August"){   $month = "Augustus"; }
+        if($month == "October"){  $month = "Oktober"; }
+
+        $year = date('Y', strtotime($week_start));
+
+        echo "<h3>$month $year, week $week_number</h3>";
+    }
+?>

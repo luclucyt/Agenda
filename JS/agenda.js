@@ -18,7 +18,7 @@ for (let i = 0; i < agenda_view_users.length; i++) {
     })
 }
 
-let shareInput = document.getElementsByClassName("share-main-form-input")[0]
+let shareInput = document.getElementsByClassName("share-display-form-input")[0]
 
 
 //on input post to php, and return the result
@@ -36,7 +36,7 @@ function updateShare(username){
     xhr.send("shareInputValue=" + shareInputValue)
 
     xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             // Create a new HTML document from the response text
             let parser = new DOMParser();
             let htmlDoc = parser.parseFromString(this.responseText, 'text/html');
@@ -50,7 +50,7 @@ function updateShare(username){
             // Update the HTML content of an element on the page with the extracted content
             document.getElementById("result").innerHTML = content;
 
-            document.getElementsByClassName(`share-main-form-input`)[0].value = username;
+            document.getElementsByClassName(`share-display-form-input`)[0].value = username;
         }
     }
 }
