@@ -54,3 +54,35 @@ function updateShare(username){
         }
     }
 }
+
+
+
+
+const div = document.querySelector('.main-main-agenda-wrapper');
+const scrollThreshold = 300; // the number of pixels near the top/bottom edge to trigger auto-scrolling
+
+let isMouseDown = false;
+div.addEventListener('mousedown', () => {
+    isMouseDown = true;
+});
+
+div.addEventListener('mouseup', () => {
+    isMouseDown = false;
+});
+
+div.addEventListener('mousemove', (e) => {
+    if (isMouseDown) {
+        // console.log(e.clientY);
+        const rect = div.getBoundingClientRect();
+        const topThreshold = rect.top + scrollThreshold;
+        const bottomThreshold = rect.bottom - scrollThreshold;
+
+        console.log(topThreshold, bottomThreshold + ": POS, " +  e.clientY);
+
+        if (e.clientY < topThreshold) {
+            div.scrollBy(0, -10); // scroll up by 10 pixels
+        } else if (e.clientY > bottomThreshold) {
+            div.scrollBy(0, 10); // scroll down by 10 pixels
+        }
+    }
+});

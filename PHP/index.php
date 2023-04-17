@@ -77,12 +77,10 @@
     <?php
         if(isset($_POST['shareInputValue'])){
             $shareInputValue = $_POST['shareInputValue'];
-        ?>
-            <div class='reponesForHTML'>
-                <?php
+            ?> <div class='reponesForHTML'> <?php
                     if($shareInputValue !== "") {
-                        $sql = "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
-                        $resultShare = mysqli_query($connection, $sql);
+                        $SQL =  "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
+                        $resultShare = mysqli_query($connection, $SQL);
 
                         $resultCheck = mysqli_num_rows($resultShare);
 
@@ -93,17 +91,15 @@
                             }
                         }
                     }
-                ?>
-            </div>
-        <?php
+            ?> </div> <?php
         }
 
         if(isset($_POST['share-from-submit'])){
             $shareUsername = $_POST['share-main-form'];
             $shareUserID = $_SESSION['userID'];
 
-            $sql = "SELECT * FROM login WHERE username = '$shareUsername'";
-            $resultShare = mysqli_query($connection, $sql);
+            $SQL = "SELECT * FROM login WHERE username = '$shareUsername'";
+            $resultShare = mysqli_query($connection, $SQL);
             $resultShareCheck = mysqli_num_rows($resultShare);
 
             if ($resultShareCheck > 0) {
@@ -112,13 +108,10 @@
                 }
             }
 
-            echo "<script>alert('{$shareUserID}')</script>";
-            echo "<script>alert('{$shareUsername}')</script>";
-
             $slqAlreadyShared = "SELECT * FROM access WHERE accesUserID = '$shareUsername' AND userID = '$userID'";
             $resultAlreadyShared = mysqli_query($connection, $slqAlreadyShared);
             $resultCheckAlreadyShared = mysqli_num_rows($resultAlreadyShared);
-            echo "<script>console.log(`{$slqAlreadyShared}`)</script>";
+
             //if the user is already shared with the user it wants to share with
             if(!$resultCheckAlreadyShared > 0){
                 $sql = "SELECT * FROM login WHERE id = '$shareUsername'";
@@ -136,8 +129,7 @@
 
                         if($result){
                             echo "<script>alert('De gebruiker heeft nu toegang tot jouw agenda')</script>";
-                        }else{
-                            echo "<script>alert('Er is iets fout gegaan')</script>";
+                            echo "<script>window.location.href = 'index.php'</script>";
                         }
                     }
                 }

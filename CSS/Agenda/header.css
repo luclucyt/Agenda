@@ -42,15 +42,14 @@
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     padding: 0 50%;
-
-    animation-fill-mode: forwards;
 }
 
 .this-week:hover{
     background: var(--text);
     color: var(--oxford-blue);
-
-    animation: header-button-hover 0.5s forwards;
+    margin-top: -10px;
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+    border-radius: 0;
 }
 
 .change-week-wrapper{
@@ -71,15 +70,13 @@
     background-color: rgba(0, 0, 0, 0);
     border: 0;
 
-    animation-fill-mode: forwards;
 }
-
-
 .change-week-button:hover{
     background: var(--text);
     color: var(--oxford-blue);
-
-    animation: header-button-hover 0.5s forwards;
+    border-radius: 40%;
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+    margin-top: -3px;
 }
 
 .log-out, .share-input, .settings-input{
@@ -102,7 +99,10 @@
 .log-out:hover, .share-input:hover, .settings-input:hover{
     background: var(--text);
     color: var(--oxford-blue);
-    animation: header-button-hover 0.5s forwards;
+    margin-top: -10px;
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+
+    border-radius: 0;
 }
 
 
@@ -160,28 +160,10 @@
 
     position: absolute;
     bottom: 0;
-
-    animation-fill-mode: forwards;
 }
 .share-display-form-submit:hover{
     background: var(--text);
     color: var(--oxford-blue);
 
-    animation: header-button-hover 0.5s forwards;
-}
-
-@keyframes header-button-hover {
-    0% {
-        border-radius: 10px;
-        margin-top: -0px;
-    }
-    70% {
-        border-radius: 60px;
-        margin-top: -5px;
-    }
-    100% {
-        border-radius: 0px;
-        box-shadow: 12px 12px 23px 0px rgba(0,0,0,1);
-        margin-top: -7px;
-    }
+    box-shadow: 0 12px 23px 0 rgba(0,0,0,1);
 }
