@@ -21,7 +21,7 @@ body{
 .agenda-grid-wrapper{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(192, 10px);
+    grid-template-rows: repeat(96, 15px);
     grid-column-gap: 1%;
 
     width: 79vw;
@@ -116,7 +116,7 @@ body{
 /* hour lines */
 .agenda-times{
     display: grid;
-    grid-template-rows: repeat(24, 80px);
+    grid-template-rows: repeat(24, 60px);
 }
 
 .time-wrapper{

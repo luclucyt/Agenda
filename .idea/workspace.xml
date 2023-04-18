@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7129692a-3748-4e85-b864-9768456ccc55" name="Changes" comment="commit">
-      <change afterPath="$PROJECT_DIR$/temp.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PHP/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CSS/Agenda/agenda.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Agenda/agenda.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/Agenda/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/CSS/Agenda/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JS/agenda.js" beforeDir="false" afterPath="$PROJECT_DIR$/JS/agenda.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PHP/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/PHP/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -115,7 +113,9 @@
       <workItem from="1681625833322" duration="6158000" />
       <workItem from="1681670039004" duration="3063000" />
       <workItem from="1681674179354" duration="32266000" />
-      <workItem from="1681800639400" duration="645000" />
+      <workItem from="1681800639400" duration="1244000" />
+      <workItem from="1681804286875" duration="287000" />
+      <workItem from="1681804932928" duration="5201000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1680989097683</created>

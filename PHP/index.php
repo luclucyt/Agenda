@@ -235,7 +235,7 @@
             <script>document.getElementsByClassName('main-main-agenda-wrapper')[0].scrollTop = 500</script>
             <div class="agenda-times">
                 <?php
-                for($i = 0; $i <= 23; $i = $i + 2){
+                for($i = 0; $i <= 23; $i++){
                 ?>
                     <div class="time-wrapper">
                         <div class="time-header"><?= $i ?> uur</div>
@@ -551,9 +551,7 @@
     function get_row(event){
         let rect = agenda_wrapper.getBoundingClientRect();
         let y = event.clientY - rect.top;
-        let row_height = (agenda_wrapper.clientHeight / row_amount);
-
-
+        let row_height = 14;
 
         //calucate the time that corresponds to the row (1 row = 15 minutes)
         let time = Math.floor(y / row_height) * 15;
@@ -579,7 +577,6 @@
         return [Math.floor(x / colom_width), day_offset];
     }
 </script>
-
 
 <script>
     let isOpen = true;
