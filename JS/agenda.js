@@ -72,12 +72,9 @@ div.addEventListener('mouseup', () => {
 
 div.addEventListener('mousemove', (e) => {
     if (isMouseDown) {
-        // console.log(e.clientY);
         const rect = div.getBoundingClientRect();
         const topThreshold = rect.top + scrollThreshold;
         const bottomThreshold = rect.bottom - scrollThreshold;
-
-        console.log(topThreshold, bottomThreshold + ": POS, " +  e.clientY);
 
         if (e.clientY < topThreshold) {
             div.scrollBy(0, -10); // scroll up by 10 pixels

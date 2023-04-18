@@ -11,6 +11,8 @@ body{
 
     scroll-behavior: smooth;
 
+    margin-top: 5vh;
+
 }
 .main-agenda-wrapper{
     display: flex;
@@ -19,13 +21,15 @@ body{
 .agenda-grid-wrapper{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(96, 15px);
+    grid-template-rows: repeat(192, 10px);
     grid-column-gap: 1%;
 
-    width: 80%;
-    float: right;
-
+    width: 79vw;
+    height: 100%;
+    overflow-y: visible;
+    overflow-x: visible;
     scroll-margin-top: 200px;
+
 }
 
 .agenda-item, .agenda-item-temp{
@@ -42,22 +46,23 @@ body{
 .agenda-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-gap: 25px;
-    width: 80%;
-    float: right;
-    margin-bottom: 10px;
+    grid-gap: 1%;
+    width: calc(80% - 10px);
+    right: 0;
     font-weight: bold;
     text-align: center;
-    position: sticky;
-    top: -1%;
+    position: fixed;
     z-index: 99;
+    top: 7vh;
 
-    background: rgba(20, 1, 82, 0.75);
+    background: rgba(20, 1, 82, 1);
 
-    padding: 1.5% 0 1% 1%;
-    border-radius: 10px 10px 10px 10px;
+    padding: 1% 0;
+    border-radius: 0px 0px 10px 10px;
 
-    margin-right: -10px;
+    margin-top: -5px;
+
+    margin-right: 10px;
 
     overflow: visible;
 }
@@ -70,8 +75,10 @@ body{
     position: relative;
     box-sizing: border-box;
     background: var(--federal-blue);
-    margin-right: 1.5%;
     opacity: 100%;
+
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .current-day{
@@ -103,17 +110,13 @@ body{
     background: rgb(127, 119, 119);
     opacity: 0.75;
     border-radius: 10px;
-    height: 88vh;
-    margin-top: 25px;
+    height: 90vh;
 }
 
 /* hour lines */
 .agenda-times{
-    position: relative;
-    left: -5vw;
-    width: 10vw;
     display: grid;
-    grid-template-rows: repeat(24, 60px);
+    grid-template-rows: repeat(24, 80px);
 }
 
 .time-wrapper{
@@ -123,7 +126,7 @@ body{
 .time-line{
      width: 82vw;
      position: absolute;
-     left: 90px;
+     left: 2.5vw;
      top: 0;
      height: 1px;
      opacity: 0.75;
@@ -134,7 +137,7 @@ body{
 
 .time-header{
     position: relative;
-    left: 40px;
+    /*left: 2.5vw;*/
     top: -10px;
 }
 
@@ -309,7 +312,6 @@ body{
     width: 100%;
     background: var(--text);
     opacity: 0.75;
-    border-radius: 1px;
     height: 1px;
     display: block;
     border-radius: 10px;

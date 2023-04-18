@@ -75,23 +75,30 @@
     </div>
 
     <?php
+
+
+        if (isset($_POST['logout'])) {
+            session_destroy();
+            echo "<script>window.location.href = 'login.php';</script>";
+        }
+
+
         if(isset($_POST['shareInputValue'])){
             $shareInputValue = $_POST['shareInputValue'];
-            ?> <div class='reponesForHTML'> <?php
-                    if($shareInputValue !== "") {
-                        $SQL =  "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
-                        $resultShare = mysqli_query($connection, $SQL);
+             echo "<div class='reponesForHTML'>";
+                if($shareInputValue !== "") {
+                    $SQL =  "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
+                    $resultShare = mysqli_query($connection, $SQL);
+                    $resultCheck = mysqli_num_rows($resultShare);
 
-                        $resultCheck = mysqli_num_rows($resultShare);
-
-                        if ($resultCheck > 0) {
-                            while ($row = mysqli_fetch_assoc($resultShare)) {
-                                $shareUserID = $row['username'];
-                                echo "<div class='share-user-wrapper' onclick='updateShare(`$shareUserID`)'><p class='share-user'>$shareUserID</p></div>";
-                            }
+                    if ($resultCheck > 0) {
+                        while ($row = mysqli_fetch_assoc($resultShare)) {
+                            $shareUserID = $row['username'];
+                            echo "<div class='share-user-wrapper' onclick='updateShare(`$shareUserID`)'><p class='share-user'>$shareUserID</p></div>";
                         }
                     }
-            ?> </div> <?php
+                }
+             echo "</div>";
         }
 
         if(isset($_POST['share-from-submit'])){
@@ -114,8 +121,8 @@
 
             //if the user is already shared with the user it wants to share with
             if(!$resultCheckAlreadyShared > 0){
-                $sql = "SELECT * FROM login WHERE id = '$shareUsername'";
-                $resultShare = mysqli_query($connection, $sql);
+                $SQL = "SELECT * FROM login WHERE id = '$shareUsername'";
+                $resultShare = mysqli_query($connection, $SQL);
 
                 $resultCheck = mysqli_num_rows($resultShare);
 
@@ -124,8 +131,8 @@
                         $shareUserID = $row['id'];
                         echo "<script>alert('{$shareUserID}')</script>";
 
-                        $sql = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
-                        $result = mysqli_query($connection, $sql);
+                        $SQL = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
+                        $result = mysqli_query($connection, $SQL);
 
                         if($result){
                             echo "<script>alert('De gebruiker heeft nu toegang tot jouw agenda')</script>";
@@ -137,157 +144,43 @@
         }
     ?>
 
-    <section class="view-wrapper">
-        <div class="functie-wrapper">
-
-                <div class="new-color-wrapper">
-                <h4>Nieuwe functie toevoegen:</h4>
-                <form method="POST" action="index.php">
-                    <label for="new-functie">Nieuwe functie:</label>
-                    <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
-
-                    <label for="new-color">Nieuwe kleur:</label>
-                    <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
-
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
-
-                    <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
-                </form>
-            </div>
-            <div class="functie-line"></div>
-            <div class="remove-color-wrapper">
-                <h4>Functie verwijderen:</h4>
-                <form method="POST" action="">
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
-
-                    <label for="remove-functie">Verwijder functie:</label><br>
-                    <select name="remove-color-select" id="remove-color-select">
-                        <?php
-                            $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
-                            $removeColorResult = mysqli_query($connection, $removeColorQuery);
-                            while($row = mysqli_fetch_assoc($removeColorResult)) {
-                                $id = $row['id'];
-                                $functie = $row['functie'];
-                                echo "<option value='$id'>$functie</option>";
-                            }
-                        ?>
-                    </select><br>
-                    <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
-                </form>
-            </div>
-        </div>
-
-        <div class="agenda-filter-wrapper">
-            <div class="filter-wrapper">
-                <h4>Filter:</h4>
-                <form method="POST" action="">
-                    <select name="filter-functie" id="filter-functie">
-                        <option value="0">Geen filter</option>
-                        <?php
-                            $filterQuery = "SELECT * FROM kleuren WHERE userID = $userID";
-                            $filterResult = mysqli_query($connection, $filterQuery);
-                            while($row = mysqli_fetch_assoc($filterResult)) {
-                                $id = $row['kleur'];
-                                $functie = $row['functie'];
-                                echo "<option value='$id'>$functie</option>";
-                            }
-                        ?>
-                    </select><br>
-                </form>
-            </div>
-        </div>
-
-        <section class="agenda-hide-wrapper">
-        </section>
-    </section>
-
-    <script>
-        document.getElementById('filter-functie').addEventListener('input', function (){
-            //if there is a filter, hide all agenda items that don't have the same class as the filter
-            if(this.value !== 0) {
-                let agendaItems = document.querySelectorAll('.agenda-item');
-                for(let i = 0; i < agendaItems.length; i++) {
-                    if(agendaItems[i].classList.contains(this.value)) {
-                        agendaItems[i].style.opacity = '1';
-                        agendaItems[i].style.boxShadow = 'rgb(255 255 255) 0px 0px 100px 10px';
-                    } else {
-                        agendaItems[i].style.opacity = '0.5';
-                        agendaItems[i].style.boxShadow = 'none';
-                    }
-                }
-            } else {
-                //if there is no filter, show all agenda items
-                let agendaItems = document.querySelectorAll('.agenda-item');
-                for(let i = 0; i < agendaItems.length; i++) {
-                    agendaItems[i].style.opacity = '1';
-                    agendaItems[i].style.boxShadow = 'none';
-                }
-            }
-        });
-    </script>
-
 
 
     <?php include 'add_to_agenda.php'; ?>
 
     <?php
-        if(isset($_POST['logout'])) {
-            session_destroy();
-            echo "<script>window.location.href = 'login.php';</script>";
-        }
-
-        // Get the current week start and end dates if they are not already set
+        //get the week start and end dates if not already set
         if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
-            // Get the current date
             $date = date('Y-m-d');
-
-            // Get the current week day
             $current_week_day = date('N', strtotime($date));
-
-            // Get the start date of the week
             $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-
-            // Get the end date of the week
             $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
 
-            // Set the session variables
             $_SESSION['week_start'] = $week_start;
             $_SESSION['week_end'] = $week_end;
         } else {
-            // Get the week start and end dates from the session variables
             $week_start = $_SESSION['week_start'];
             $week_end = $_SESSION['week_end'];
         }
 
-        // Check if the previous week button has been clicked
         if(isset($_POST['prev_week'])) {
-            // Move the week start and end dates back by 7 days
+            //move the week start and end dates back one week
             $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_start'])));
             $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_end'])));
         }
 
-        // Check if this week button has been clicked
         if(isset($_POST['this_week'])) {
-            // Get the current date
             $date = date('Y-m-d');
-
-            // Get the current week day
             $current_week_day = date('N', strtotime($date));
-
-            // Get the start date of the week
             $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-
-            // Get the end date of the week
             $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
 
-            // Set the session variables
             $_SESSION['week_start'] = $week_start;
             $_SESSION['week_end'] = $week_end;
         }
 
-        // Check if the next week button has been clicked
         if(isset($_POST['next_week'])) {
-            // Move the week start and end dates forward by 7 days
+            //move the week start and end dates forward one week
             $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_start'])));
             $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_end'])));
         }
@@ -295,41 +188,40 @@
         echo "<input type='hidden' id='week_start' value='$week_start'>";
     ?>
     <div class="main-main-agenda-wrapper">
+          <div class='agenda-header'>
+                <?php
+                    for ($i = 0; $i < 7; $i++) {
+                        $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
-        <div class='agenda-header'>
-            <?php
-                for ($i = 0; $i < 7; $i++) {
-                    $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+                        // Get the name of the day of the week
+                        $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
-                    // Get the name of the day of the week
-                    $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+                        if($day_name == "Monday") {
+                            $day_name = "Maandag";
+                        } elseif($day_name == "Tuesday") {
+                            $day_name = "Dinsdag";
+                        } elseif($day_name == "Wednesday") {
+                            $day_name = "Woensdag";
+                        } elseif($day_name == "Thursday") {
+                            $day_name = "Donderdag";
+                        } elseif($day_name == "Friday") {
+                            $day_name = "Vrijdag";
+                        } elseif($day_name == "Saturday") {
+                            $day_name = "Zaterdag";
+                        } elseif($day_name == "Sunday") {
+                            $day_name = "Zondag";
+                        }
 
-                    if($day_name == "Monday") {
-                        $day_name = "Maandag";
-                    } elseif($day_name == "Tuesday") {
-                        $day_name = "Dinsdag";
-                    } elseif($day_name == "Wednesday") {
-                        $day_name = "Woensdag";
-                    } elseif($day_name == "Thursday") {
-                        $day_name = "Donderdag";
-                    } elseif($day_name == "Friday") {
-                        $day_name = "Vrijdag";
-                    } elseif($day_name == "Saturday") {
-                        $day_name = "Zaterdag";
-                    } elseif($day_name == "Sunday") {
-                        $day_name = "Zondag";
+                        // If that day is today's day, highlight it and add the name of the day
+                        if ($date == date('jS M')) {
+                            $date = "<div class='agenda-day current-day'>$date, $day_name</div>";
+                        } else {
+                            $date = "<div class='agenda-day'>$date, $day_name</div>";
+                        }
+                        echo $date;
                     }
-
-                    // If that day is today's day, highlight it and add the name of the day
-                    if ($date == date('jS M')) {
-                        $date = "<div class='agenda-day current-day'>$date, $day_name</div>";
-                    } else {
-                        $date = "<div class='agenda-day'>$date, $day_name</div>";
-                    }
-                    echo $date;
-                }
-            ?>
-        </div>
+                ?>
+          </div>
 
         <div class='agenda-line-wrapper'>
             <?php
@@ -343,7 +235,7 @@
             <script>document.getElementsByClassName('main-main-agenda-wrapper')[0].scrollTop = 500</script>
             <div class="agenda-times">
                 <?php
-                for($i = 0; $i <= 23; $i++){
+                for($i = 0; $i <= 23; $i = $i + 2){
                 ?>
                     <div class="time-wrapper">
                         <div class="time-header"><?= $i ?> uur</div>
@@ -488,7 +380,7 @@
 <script>
     let agenda_wrapper = document.getElementsByClassName('agenda-grid-wrapper')[0];
     let start_timeInverted = false;
-    let row_amount = 96;
+    let row_amount = 92;
     let colom_amount = 7;
 
     let is_dragging = false;
@@ -659,7 +551,9 @@
     function get_row(event){
         let rect = agenda_wrapper.getBoundingClientRect();
         let y = event.clientY - rect.top;
-        let row_height = agenda_wrapper.clientHeight / row_amount;
+        let row_height = (agenda_wrapper.clientHeight / row_amount);
+
+
 
         //calucate the time that corresponds to the row (1 row = 15 minutes)
         let time = Math.floor(y / row_height) * 15;
@@ -668,6 +562,8 @@
 
         // format the time value so it can be used in the input field
         let formatted_time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+        console.log(Math.floor(y / row_height));
 
         return [Math.floor(y / row_height), formatted_time];
     }
