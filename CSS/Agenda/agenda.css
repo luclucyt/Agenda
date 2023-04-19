@@ -63,7 +63,8 @@ body{
     background: rgb(127, 119, 119);
     opacity: 0.75;
     border-radius: 10px;
-    height: 90vh;
+    height: 95vh;
+    margin-top: -4vh
 }
 
 /* hour lines */
