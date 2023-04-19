@@ -210,6 +210,7 @@
 
     <script>
         document.getElementById('filter-functie').addEventListener('input', function (){
+           
             //if there is a filter, hide all agenda items that don't have the same class as the filter
             if(this.value !== 0) {
                 let agendaItems = document.querySelectorAll('.agenda-item');
