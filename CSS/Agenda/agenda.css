@@ -11,8 +11,8 @@ body{
 
     scroll-behavior: smooth;
 
-    margin-top: 5vh;
-
+    margin-top: 7vh;
+    padding-left: 200px;
 }
 .main-agenda-wrapper{
     display: flex;
@@ -87,8 +87,6 @@ body{
 }
 
 
-
-
 /* agenda lines */
 
 /* day lines */
@@ -126,7 +124,7 @@ body{
 .time-line{
      width: 82vw;
      position: absolute;
-     left: 2.5vw;
+     left: -1vw;
      top: 0;
      height: 1px;
      opacity: 0.75;
@@ -137,7 +135,7 @@ body{
 
 .time-header{
     position: relative;
-    /*left: 2.5vw;*/
+    left: -4vw;
     top: -10px;
 }
 

@@ -57,7 +57,7 @@
                 <input type="submit" name="logout" value="Log uit" class="log-out">
             </form>
             <form method="post" class="settings-form-wrapper">
-                <input type="submit" name="settings-input" value="Instellingen" class="settings-input">
+                <input type="button" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = 'settings.php';">
             </form>
             <input type="button" name="share-input" value="Deel" class="share-input">
         </div>
@@ -144,6 +144,95 @@
         }
     ?>
 
+        <section class="view-wrapper">
+            <div class="functie-wrapper">
+                    <div class="new-color-wrapper">
+                    <h4>Nieuwe functie toevoegen:</h4>
+                    <form method="POST" action="index.php">
+                        <label for="new-functie">Nieuwe functie:</label>
+                        <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
+
+                        <label for="new-color">Nieuwe kleur:</label>
+                        <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
+
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
+                    </form>
+                </div>
+                <div class="functie-line"></div>
+                <div class="remove-color-wrapper">
+                    <h4>Functie verwijderen:</h4>
+                    <form method="POST" action="">
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <label for="remove-functie">Verwijder functie:</label><br>
+                        <select name="remove-color-select" id="remove-color-select">
+                            <?php
+                                $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                                $removeColorResult = mysqli_query($connection, $removeColorQuery);
+                                while($row = mysqli_fetch_assoc($removeColorResult)) {
+                                    $id = $row['id'];
+                                    $functie = $row['functie'];
+                                    echo "<option value='$id'>$functie</option>";
+                                }
+                            ?>
+                        </select><br>
+                        <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="agenda-filter-wrapper">
+                <div class="filter-wrapper">
+                    <h4>Filter:</h4>
+                    <form method="POST" action="">
+                        <select name="filter-functie" id="filter-functie">
+                            <option value="0">Geen filter</option>
+                            <?php
+                                $filterQuery = "SELECT * FROM kleuren WHERE userID = $userID";
+                                $filterResult = mysqli_query($connection, $filterQuery);
+                                while($row = mysqli_fetch_assoc($filterResult)) {
+                                    $id = $row['kleur'];
+                                    $functie = $row['functie'];
+                                    echo "<option value='$id'>$functie</option>";
+                                }
+                            ?>
+                        </select><br>
+                    </form>
+                </div>
+            </div>
+
+            <section class="agenda-hide-wrapper">
+            </section>
+        </section>
+
+    <script>
+        document.getElementById('filter-functie').addEventListener('input', function (){
+            //if there is a filter, hide all agenda items that don't have the same class as the filter
+            if(this.value !== 0) {
+                let agendaItems = document.querySelectorAll('.agenda-item');
+                for(let i = 0; i < agendaItems.length; i++) {
+                    if(agendaItems[i].classList.contains(this.value)) {
+                        agendaItems[i].style.opacity = '1';
+                        agendaItems[i].style.boxShadow = 'rgb(255 255 255) 0px 0px 100px 10px';
+                    } else {
+                        agendaItems[i].style.opacity = '0.5';
+                        agendaItems[i].style.boxShadow = 'none';
+                    }
+                }
+            } else {
+                //if there is no filter, show all agenda items
+                let agendaItems = document.querySelectorAll('.agenda-item');
+                for(let i = 0; i < agendaItems.length; i++) {
+                    agendaItems[i].style.opacity = '1';
+                    agendaItems[i].style.boxShadow = 'none';
+                }
+            }
+        });
+    </script>
+
+
 
 
     <?php include 'add_to_agenda.php'; ?>
@@ -197,26 +286,26 @@
                         $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
                         if($day_name == "Monday") {
-                            $day_name = "Maandag";
+                            $day_name = "Ma";
                         } elseif($day_name == "Tuesday") {
-                            $day_name = "Dinsdag";
+                            $day_name = "Di";
                         } elseif($day_name == "Wednesday") {
-                            $day_name = "Woensdag";
+                            $day_name = "Wo";
                         } elseif($day_name == "Thursday") {
-                            $day_name = "Donderdag";
+                            $day_name = "Do";
                         } elseif($day_name == "Friday") {
-                            $day_name = "Vrijdag";
+                            $day_name = "Vr";
                         } elseif($day_name == "Saturday") {
-                            $day_name = "Zaterdag";
+                            $day_name = "Za";
                         } elseif($day_name == "Sunday") {
-                            $day_name = "Zondag";
+                            $day_name = "Zo";
                         }
 
                         // If that day is today's day, highlight it and add the name of the day
                         if ($date == date('jS M')) {
                             $date = "<div class='agenda-day current-day'>$date, $day_name</div>";
                         } else {
-                            $date = "<div class='agenda-day'>$date, $day_name</div>";
+                            $date = "<div class='agenda-day'>$date $day_name</div>";
                         }
                         echo $date;
                     }
@@ -464,6 +553,14 @@
                 start_timeInverted = true;
             }
 
+            //if start/end time is bigger than 24:00 then change it to 23:45
+            if (start_time >= 23.75){
+                start_time = 23.75;
+            }
+            if (end_time >= 23.76){
+                end_time = 23.75;
+            }
+
 
             document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
             <form method="POST" action="../PHP/index.php" autocomplete="off" id="add-to-agenda-form">
@@ -582,7 +679,6 @@
     let isOpen = true;
     toggleShareWrapper();
 
-
     document.getElementsByClassName("share-input")[0].addEventListener('click', function() {
         toggleShareWrapper();
     });
@@ -654,6 +750,6 @@
 
         $year = date('Y', strtotime($week_start));
 
-        echo "<h3>$month $year, week $week_number</h3>";
+        echo "<h3>$month $year, Week $week_number</h3>";
     }
 ?>
