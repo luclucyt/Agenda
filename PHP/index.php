@@ -27,6 +27,7 @@
 
     <link rel="stylesheet" href="../CSS/Agenda/agenda.css">
     <link rel="stylesheet" href="../CSS/Agenda/header.css">
+    <link rel="stylesheet" href="../CSS/Agenda/agendaHeader.css">
 
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
