@@ -1,30 +1,6 @@
 body{
     overflow: hidden;
-}
-
-.header{
-    width: 100%;
-    display: flex;
-
-    justify-content: space-between;
-}
-
-.header div{
-    display: flex;
-}
-
-.settings-button{
-    width: 150px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    border: 1px solid var(--text);
-    background: var(--federal-blue);
-    border-radius: 0 10px 10px 0;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    margin-top: 10px;
-    margin-left: 5px;
+    margin: 0;
 }
 
 .main-main-agenda-wrapper{
@@ -33,6 +9,11 @@ body{
     overflow-x: hidden;
     float: right;
 
+    scroll-behavior: smooth;
+
+    margin-top: 7vh;
+    padding-left: 200px;
+    padding-top: 20px;
 }
 .main-agenda-wrapper{
     display: flex;
@@ -44,10 +25,12 @@ body{
     grid-template-rows: repeat(96, 15px);
     grid-column-gap: 1%;
 
-    width: 80%;
-    float: right;
-
+    width: 79vw;
+    height: 100%;
+    overflow-y: visible;
+    overflow-x: visible;
     scroll-margin-top: 200px;
+
 }
 
 .agenda-item, .agenda-item-temp{
@@ -58,88 +41,6 @@ body{
 
     position: relative;
 }
-
-
-/* agenda header */
-.agenda-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 25px;
-    width: 80%;
-    float: right;
-    margin-bottom: 10px;
-    font-weight: bold;
-    text-align: center;
-    position: sticky;
-    top: -1%;
-    z-index: 99;
-
-    background: rgba(20, 1, 82, 0.75);
-
-    padding: 1.5% 0 1% 1%;
-    border-radius: 10px 10px 10px 10px;
-
-    margin-right: -10px;
-}
-
-.agenda-day {
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    border: 1px solid var(--text);
-    position: relative;
-    box-sizing: border-box;
-    background: var(--federal-blue);
-    margin-right: 1.5%;
-    opacity: 100%;
-}
-
-.current-day{
-    background: var(--text);
-    color: var(--oxford-blue);
-}
-
-.log-out{
-    width: 150px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    border: 1px solid var(--text);
-    background: var(--federal-blue);
-    border-radius: 10px 0 0 10px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    margin-top: 10px;
-}
-.log-out:hover{
-    background: var(--text);
-    color: var(--oxford-blue);
-}
-
-.week-buttons{
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    float: right;
-}
-
-.week-button{
-    width: 33%;
-    height: 50px;
-    border-radius: 10px;
-    border: 1px solid var(--text);
-    background: var(--oxford-blue);
-    color: var(--text);
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-
-    transition: all 0.3s ease-in-out;
-}
-.week-button:hover{
-     background: var(--text);
-     color: var(--oxford-blue);
- }
 
 /* agenda lines */
 
@@ -162,15 +63,12 @@ body{
     background: rgb(127, 119, 119);
     opacity: 0.75;
     border-radius: 10px;
-    height: 88vh;
-    margin-top: 25px;
+    height: 95vh;
+    margin-top: -4vh
 }
 
 /* hour lines */
 .agenda-times{
-    position: relative;
-    left: -5vw;
-    width: 10vw;
     display: grid;
     grid-template-rows: repeat(24, 60px);
 }
@@ -182,7 +80,7 @@ body{
 .time-line{
      width: 82vw;
      position: absolute;
-     left: 0;
+     left: -1vw;
      top: 0;
      height: 1px;
      opacity: 0.75;
@@ -190,6 +88,12 @@ body{
 
      z-index: -1;
  }
+
+.time-header{
+    position: relative;
+    left: -4vw;
+    top: -10px;
+}
 
 /* agenda items */
 .agenda-date0{grid-column: 1;}
@@ -312,10 +216,7 @@ body{
 /* agenda filer */
 .agenda-filter-wrapper{
     background-color: var(--neavy-blue);
-    width: 12vw;
-
-    position: fixed;
-    top: 73vh;
+    width: 100%;
 
     padding: 1%;
     border-radius: 10px;
@@ -365,7 +266,6 @@ body{
     width: 100%;
     background: var(--text);
     opacity: 0.75;
-    border-radius: 1px;
     height: 1px;
     display: block;
     border-radius: 10px;
@@ -375,17 +275,17 @@ body{
     background-color: var(--neavy-blue);
     border-radius: 10px;
 
-    width: fit-content;
+    width: 100%;
     padding: 1%;
 
-    position: fixed;
-    top: 13vh;
 
     height: 55vh;
     overflow: scroll;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgb(13, 181, 167) var(--neavy-blue);
+
+    box-sizing: border-box;
 }
 
 .functie-wrapper form{
@@ -442,12 +342,9 @@ body{
     background-color: var(--neavy-blue);
     border-radius: 10px;
 
-    width: fit-content;
     padding: 1%;
 
-    position: fixed;
-    top: 50vh;
-
+    width: 100%;
     height: fit-content;
 }
 
@@ -482,4 +379,20 @@ body{
 .remove-color-submit:hover{
     background: var(--text);
     color: var(--oxford-blue);
+}
+
+.view-wrapper {
+    background-color: black;
+    width: 15vw;
+    height: 80vh;
+
+    position: fixed;
+
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }

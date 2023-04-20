@@ -3,15 +3,19 @@
 
     --black: rgb(2, 1, 10);
     --oxford-blue: rgb(4, 5, 46);
-    --federal-blue: #140152;
+    --federal-blue: rgb(20, 1, 82);
     --neavy-blue: rgb(34, 0, 124);
     --dark-blue: rgb(13, 0, 164);
 }
 *{
     font-family: Arial, Helvetica, sans-serif;
-    color: var(--text);
 
     user-select: none;
+}
+
+/* text */
+h1, h2, h3, h4, h5, h6, p, li, a, button, input, textarea, select, option, label, i{
+    color: var(--text);
 }
 
 body{

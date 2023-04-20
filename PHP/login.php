@@ -16,8 +16,8 @@
     <script src="../JS/login.js" defer></script>
 </head>
 <body>
-
-    <?php include_once 'connectAgenda.php'; ?>
+    <?php ini_set('display_errors', 0); ?>
+    <?php include_once 'connectDatabase.php'; ?>
     <section class="golf-1">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#140152" fill-opacity="1" d="M0,160L24,165.3C48,171,96,181,144,165.3C192,149,240,107,288,101.3C336,96,384,128,432,149.3C480,171,528,181,576,181.3C624,181,672,171,720,144C768,117,816,75,864,74.7C912,75,960,117,1008,122.7C1056,128,1104,96,1152,74.7C1200,53,1248,43,1296,53.3C1344,64,1392,96,1416,112L1440,128L1440,0L1416,0C1392,0,1344,0,1296,0C1248,0,1200,0,1152,0C1104,0,1056,0,1008,0C960,0,912,0,864,0C816,0,768,0,720,0C672,0,624,0,576,0C528,0,480,0,432,0C384,0,336,0,288,0C240,0,192,0,144,0C96,0,48,0,24,0L0,0Z"></path></svg>
     </section>
@@ -145,6 +145,10 @@
                         $result3 = mysqli_query($connection, $sql3);
                         $result4 = mysqli_query($connection, $sql4);
                         $result5 = mysqli_query($connection, $sql5);
+
+
+                        $sql1 = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$id', '$id')";
+                        $result1 = mysqli_query($connection, $sql1);
                     } else {
                         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
                     }
