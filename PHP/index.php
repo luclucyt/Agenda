@@ -76,13 +76,9 @@
     </div>
 
     <?php
-
-<<<<<<< HEAD
                 <label for="new-color">Nieuwe kleur:</label>
                 <input type="text" data-coloris class="coloris instance1" id="new-color" value=" #77077d"><br> 
-                <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
-=======
->>>>>>> 1110ccdc375f0df9ce806ef8721aa52879d2c44c
+                <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br>
 
         if (isset($_POST['logout'])) {
             session_destroy();
