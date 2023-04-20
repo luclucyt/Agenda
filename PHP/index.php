@@ -75,11 +75,7 @@
         </div>
     </div>
 
-    <label for="new-color">Nieuwe kleur:</label>
-    <input type="text" data-coloris class="coloris instance1" id="new-color" value=" #77077d"><br> 
-    <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br>
-    
-    <?php
+        <?php
         if (isset($_POST['logout'])) {
             session_destroy();
             echo "<script>window.location.href = 'login.php';</script>";
