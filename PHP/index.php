@@ -56,7 +56,7 @@
                 <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
 
                 <label for="new-color">Nieuwe kleur:</label>
-                <input type="text" data-coloris class="coloris instance1" id="new-color"  value=" #77077d"><br> 
+                <input type="text" data-coloris class="coloris instance1" id="new-color" value=" #77077d"><br> 
                 <!-- <input type="color"  id="new-color" name="new-color" placeholder="Nieuwe kleur"><br> -->
 
                 <input type="hidden" name="userID" value="<?=  $userID ?>">
