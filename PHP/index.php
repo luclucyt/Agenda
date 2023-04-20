@@ -303,9 +303,9 @@
 
                         // If that day is today's day, highlight it and add the name of the day
                         if ($date == date('jS M')) {
-                            $date = "<div class='agenda-day current-day'>$date, $day_name</div>";
+                            $date = "<div class='agenda-day current-day'><label>$date, $day_name</label></div>";
                         } else {
-                            $date = "<div class='agenda-day'>$date $day_name</div>";
+                            $date = "<div class='agenda-day'><label>$date $day_name</label></div>";
                         }
                         echo $date;
                     }
@@ -327,7 +327,7 @@
                 for($i = 0; $i <= 23; $i++){
                 ?>
                     <div class="time-wrapper">
-                        <div class="time-header"><?= $i ?> uur</div>
+                        <div class="time-header"><label><?= $i ?> uur</label></div>
                         <div class="time-line"></div>
                     </div>
                 <?php } ?>

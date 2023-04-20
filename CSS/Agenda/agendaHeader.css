@@ -38,5 +38,9 @@
 
 .current-day{
     background: var(--text);
+
+}
+
+.current-day label{
     color: var(--oxford-blue);
 }

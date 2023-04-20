@@ -78,15 +78,15 @@ body{
     width: fit-content;
 }
 .time-line{
-     width: 82vw;
-     position: absolute;
-     left: -1vw;
-     top: 0;
-     height: 1px;
-     opacity: 0.75;
-     background: var(--text);
+    width: 82vw;
+    position: absolute;
+    left: -1vw;
+    top: 0;
+    height: 1px;
+    opacity: 0.75;
+    background: var(--text);
 
-     z-index: -1;
+    z-index: -1;
  }
 
 .time-header{
