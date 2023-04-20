@@ -1,15 +1,7 @@
 <?php
-//    //start the session
-//    if (session_status() == PHP_SESSION_NONE) {
-//        session_set_cookie_params(31536000);
-//        session_start(); //Start the session if it doesn't exist
-//    }
-//    $userID = $_SESSION['userID'];
-//
-
     if(isset($_POST['agenda-submit'])) {
         //connect to the database
-        require_once "connectDatabase.php";
+        //require_once "connectDatabase.php";
 
         //get the input data
         $agenda_naam = $_POST['agenda-naam'];

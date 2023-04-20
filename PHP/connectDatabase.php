@@ -1,4 +1,10 @@
 <?php
+
+echo "<script>
+if(window.history.replaceState) {
+    window.history.replaceState( null, null, window.location.href );
+}</script>";
+
 $servername = "81.206.73.35";
 $username = "LucasDatabase";
 $password = "LucasDatabase";
