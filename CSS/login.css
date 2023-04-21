@@ -86,7 +86,15 @@ path {
 }
 
 .submit-button:hover{
-    background-color: var(--neavy-blue);
+    background-color: var(--text);
+    border-radius: 0;
+
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+    cursor: pointer;
+}
+
+.submit-button:hover *{
+    color: var(--oxford-blue);
 }
 
 .login-wrapper, .signup-wrapper{

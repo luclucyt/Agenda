@@ -1,15 +1,17 @@
 .header{
-    width: 98vw;
+    width: 98%;
     display: flex;
 
     justify-content: space-between;
     align-items: center;
 
-    padding: 0 1vw 0 1vw;
+    padding: 0 1%;
 
     background-color: var(--neavy-blue);
 
-    margin-bottom: 25px;
+    height: 5vh;
+
+    margin-bottom: 100px;
 }
 
 .left-side-header, .right-side-header{
@@ -32,12 +34,12 @@
 
 .this-week{
     width: fit-content;
-    height: 50px;
+    height: 4vh;
     border-radius: 10px;
     border: 1px solid var(--text);
     background: var(--federal-blue);
     color: var(--text);
-    font-size: 18px;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -57,8 +59,8 @@
     display: flex;
 }
 .change-week-button{
-    width: 50px;
-    height: 50px;
+    width: 4vh;
+    height: 4vh;
     color: var(--text);
     font-size: 25px;
     font-weight: bold;
@@ -81,15 +83,13 @@
 
 .log-out, .share-input, .settings-input{
     width: 150px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
+    height: 4vh;
+    font-size: 1.2rem;
     border: 1px solid var(--text);
     background: var(--federal-blue);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-
-    animation-fill-mode: forwards;
+    align-items: center;
 }
 
 .log-out{ border-radius: 10px 0 0 10px; }

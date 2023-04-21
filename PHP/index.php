@@ -26,12 +26,11 @@
     <?php include 'forceLogin.php' ?>
     <?php include 'connectDatabase.php'; ?>
     <?php include 'add_to_agenda.php'; ?>
-    <?php include 'changeWeek.php' ?>
 
 
     <header class="header">
         <div class="left-side-header">
-            <h1>Welkom <?= $_SESSION['username'] ?>,</h1>
+            <h2>Welkom <?= $_SESSION['username'] ?>,</h2>
 
             <?php displayWeekDateHeader(); ?>
 
@@ -42,6 +41,47 @@
                     <input type="submit" name="next_week" value=">" class="change-week-button">
                 </div>
             </form>
+            
+            
+            <?php
+                //get the week start and end dates if not already set
+                if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
+                    $date = date('Y-m-d');
+                    $current_week_day = date('N', strtotime($date));
+                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+
+                    $_SESSION['week_start'] = $week_start;
+                    $_SESSION['week_end'] = $week_end;
+                } else {
+                    $week_start = $_SESSION['week_start'];
+                    $week_end = $_SESSION['week_end'];
+                }
+
+                if(isset($_POST['prev_week'])) {
+                    //move the week start and end dates back one week
+                    $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_start'])));
+                    $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_end'])));
+                }
+
+                if(isset($_POST['this_week'])) {
+                    $date = date('Y-m-d');
+                    $current_week_day = date('N', strtotime($date));
+                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
+                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+
+                    $_SESSION['week_start'] = $week_start;
+                    $_SESSION['week_end'] = $week_end;
+                }
+
+                if(isset($_POST['next_week'])) {
+                    //move the week start and end dates forward one week
+                    $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_start'])));
+                    $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_end'])));
+                }
+
+                echo "<input type='hidden' id='week_start' value='$week_start'>";
+            ?>
         </div>
 
         <div class="right-side-header">
@@ -240,7 +280,7 @@
     agenda_wrapper.addEventListener('mousemove', function(event) {
         if(is_dragging === true){
             //mouse is moving on the agenda and is pressed
-            end_row = get_row(event)[0] + 1;
+            end_row = get_row(event)[0];
             end_time = get_row(event)[1];
 
             //remove all the temp agenda items
@@ -319,7 +359,9 @@
                     <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + end_time + `" id="agenda-eind-time" hidden><br>
 
                 </div>
-                <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button></form>`;
+                <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button>
+            </form>
+             `;
 
             if(start_timeInverted === true){
                 let temp = start_time;
@@ -438,7 +480,7 @@
 
         $year = date('Y', strtotime($week_start));
 
-        echo "<h3>$month $year, Week $week_number</h3>";
+        echo "<h3>$month $year, week: $week_number</h3>";
     }
 
     function getColors($userID, $connection){

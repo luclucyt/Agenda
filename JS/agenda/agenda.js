@@ -59,7 +59,7 @@ function updateShare(username){
 
 
 const div = document.querySelector('.main-main-agenda-wrapper');
-const scrollThreshold = 300; // the number of pixels near the top/bottom edge to trigger auto-scrolling
+const scrollThreshold = 150; // the number of pixels near the top/bottom edge to trigger auto-scrolling
 
 let isMouseDown = false;
 div.addEventListener('mousedown', () => {
@@ -77,9 +77,9 @@ div.addEventListener('mousemove', (e) => {
         const bottomThreshold = rect.bottom - scrollThreshold;
 
         if (e.clientY < topThreshold) {
-            div.scrollBy(0, -10); // scroll up by 10 pixels
+            div.scrollBy(0, -5); // scroll up by 10 pixels
         } else if (e.clientY > bottomThreshold) {
-            div.scrollBy(0, 10); // scroll down by 10 pixels
+            div.scrollBy(0, 5); // scroll down by 10 pixels
         }
     }
 });
@@ -143,3 +143,5 @@ function toggleShareWrapper() {
         isOpen = false;
     }
 }
+
+document.getElementsByClassName("main-main-agenda-wrapper")[0].scrollTop = 400;
