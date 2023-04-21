@@ -143,7 +143,9 @@
                     <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
                 </form>
             </div>
+
             <div class="functie-line"></div>
+            
             <div class="remove-color-wrapper">
                 <h4>Functie verwijderen:</h4>
                 <form method="POST" action="">
