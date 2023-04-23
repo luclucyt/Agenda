@@ -49,4 +49,25 @@
 
         //run the query in the database
         $result = mysqli_query($connection, $sqlAgenda);
+
+        //get tha data from the database
+        $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID' AND naam = '$agenda_naam' AND omschrijving = '$agenda_omschrijving' AND startDatum = '$agenda_start_datum' AND eindDatum = '$agenda_eind_datum' AND startTijd = '$agenda_start_tijd' AND eindTijd = '$agenda_eind_tijd' AND functie = '$agenda_functie' AND kleur = '$agenda_kleur'";
+        $result = mysqli_query($connection, $sqlAgenda);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $agendaItemID = $row['id'];
+            $agendaItemUserID = $row['userID'];
+            $agendaItemNaam = $row['naam'];
+            $agendaItemOmschrijving = $row['omschrijving'];
+            $agendaItemStartDatum = $row['startDatum'];
+            $agendaItemEindDatum = $row['eindDatum'];
+            $agendaItemStartTijd = $row['startTijd'];
+            $agendaItemEindTijd = $row['eindTijd'];
+            $agendaItemtaak = $row['taak'];
+            $agendaItemFunctie = $row['functie'];
+            $agendaItemKleur = $row['kleur'];
+
+
+            writeToCustomDB("agenda", $agendaItemID, $agendaItemUserID, $agendaItemNaam, $agendaItemOmschrijving, $agendaItemStartDatum, $agendaItemEindDatum, $agendaItemStartTijd, $agendaItemEindTijd, $agendaItemtaak, $agendaItemFunctie, $agendaItemKleur);
+        }
     }

@@ -4,28 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="../CSS/notebook.png">
+    <link rel="icon" type="image/x-icon" href="../../CSS/notebook.png">
 
     <title>Agenda</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../CSS/coloris.min.css">
-    <link rel="stylesheet" href="../CSS/root.css">
+    <link rel="stylesheet" href="../../CSS/coloris.min.css">
+    <link rel="stylesheet" href="../../CSS/root.css">
 
-    <link rel="stylesheet" href="../CSS/Agenda/agenda.css">
-    <link rel="stylesheet" href="../CSS/Agenda/header.css">
-    <link rel="stylesheet" href="../CSS/Agenda/agendaHeader.css">
+    <link rel="stylesheet" href="../../CSS/Agenda/agenda.css">
+    <link rel="stylesheet" href="../../CSS/Agenda/header.css">
+    <link rel="stylesheet" href="../../CSS/Agenda/agendaHeader.css">
 
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="../JS/agenda/coloris.min.js"></script>
-    <script src="../JS/agenda/agenda.js" defer></script>
+    <script src="../../JS/agenda/coloris.min.js"></script>
+    <script src="../../JS/agenda/agenda.js" defer></script>
 </head>
 
 <body>
-    <?php include 'forceLogin.php' ?>
-    <?php include 'connectDatabase.php'; ?>
-    <?php include 'add_to_agenda.php'; ?>
+    <?php include '../forceLogin.php' ?>
+    <?php include '../connectDatabase.php'; ?>
+    <?php include '../connectCustomDB.php'; ?>
+    <?php include 'addToAgenda.php'; ?>
 
 
     <header class="header">
@@ -89,7 +90,7 @@
                 <input type="submit" name="logout" value="Log uit" class="log-out">
             </form>
             <form method="post" class="settings-form-wrapper">
-                <input type="button" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = 'settings.php';">
+                <input type="button" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = '../settings.php';">
             </form>
             <input type="button" name="share-input" value="Deel" class="share-input">
         </div>
@@ -158,6 +159,33 @@
                     <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
                 </form>
             </div>
+            <?php 
+                //if color is deleted
+                if(isset($_POST['remove-color-select'])){
+                    $id = $_POST['remove-color-select'];
+
+                    //get the data from the database
+                    $sql = "SELECT * FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
+                    $result = mysqli_query($connection, $sql);
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $colorID = $row['id'];
+                        $colorUserID = $row['userID'];
+                        $colorName = $row['kleur'];
+                        $colorFunction = $row['functie'];
+
+                        //delete the data from the database
+                        removeFromCustomDB("kleuren", $colorID, $colorUserID, $colorName, $colorFunction);
+                    }
+
+                    $SQL = "DELETE FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
+
+                    $result = mysqli_query($connection, $SQL);
+
+                    echo "<script>window.location.href</script>";
+                    echo "<script>window.location.reload()</script>";
+                } 
+            ?>
         </div>
 
         <div class="agenda-filter-wrapper">
@@ -323,7 +351,7 @@
 
 
             document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
-            <form method="POST" action="../PHP/index.php" autocomplete="off" id="add-to-agenda-form">
+            <form method="POST" action="" autocomplete="off" id="add-to-agenda-form">
                 <div>
                     <input type="text" name="agenda-naam" placeholder="Titel" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>
 
@@ -489,7 +517,7 @@
         $removeColorQuery = "SELECT * FROM kleuren WHERE userID = $userID";
         $removeColorResult = mysqli_query($connection, $removeColorQuery);
         while($row = mysqli_fetch_assoc($removeColorResult)) {
-            $id = $row['id'];
+            $id = $row['kleur'];
             $functie = $row['functie'];
             echo "<option value='$id'>$functie</option>";
         }
@@ -501,7 +529,7 @@
 //ISSETS
 if (isset($_POST['logout'])) {
     session_destroy();
-    echo "<script>window.location.href = 'login.php';</script>";
+    echo "<script>window.location.href = '../login/login.php';</script>";
 }
 
 if(isset($_POST['share-from-submit'])){
@@ -536,6 +564,18 @@ if(isset($_POST['share-from-submit'])){
                 $SQL = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
                 $result = mysqli_query($connection, $SQL);
 
+                //get the data from the database
+                $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID' AND accesUserID = '$shareUserID'";
+                $resultAgenda = mysqli_query($connection, $sqlAgenda);
+
+                while ($row = mysqli_fetch_assoc($resultAgenda)){
+                    $id = $row['id'];
+                    $userID = $row['userID'];
+                    $accesUserID = $row['accesUserID'];
+
+                    writeToCustomDB("access", $id, $userID);
+                }
+
                 if($result){
                     echo "<script>alert('De gebruiker heeft nu toegang tot jouw agenda')</script>";
                     echo "<script>window.location.href = 'index.php'</script>";
@@ -548,6 +588,27 @@ if(isset($_POST['share-from-submit'])){
 //delete button is pressed
 if(isset($_POST['agenda-delete'])){
     $id = $_POST['id'];
+
+    //get the data before deleting it
+    $sqlAgenda = "SELECT * FROM agenda WHERE id = '$id'";
+    $resultAgenda = mysqli_query($connection, $sqlAgenda);
+    while ($row = mysqli_fetch_assoc($resultAgenda)) {
+        $agendaItemID = $row['id'];
+        $agendaItemUserID = $row['userID'];
+        $agendaItemNaam = $row['naam'];
+        $agendaItemOmschrijving = $row['omschrijving'];
+        $agendaItemStartDatum = $row['startDatum'];
+        $agendaItemEindDatum = $row['eindDatum'];
+        $agendaItemStartTijd = $row['startTijd'];
+        $agendaItemEindTijd = $row['eindTijd'];
+        $agendaItemtaak = $row['taak'];
+        $agendaItemFunctie = $row['functie'];
+        $agendaItemKleur = $row['kleur'];
+
+
+        removeFromCustomDB("agenda", $agendaItemID, $agendaItemUserID, $agendaItemNaam, $agendaItemOmschrijving, $agendaItemStartDatum, $agendaItemEindDatum, $agendaItemStartTijd, $agendaItemEindTijd, $agendaItemtaak, $agendaItemFunctie, $agendaItemKleur);
+    }
+
     $sqlAgenda = "DELETE FROM agenda WHERE id = '$id'";
     $result = mysqli_query($connection, $sqlAgenda);
 
@@ -563,19 +624,62 @@ if(isset($_POST['new-color-submit'])){
     echo "<script>alert('{$newFunction}');</script>";
     echo "<script>alert('{$newColor}');</script>";
 
-    $SQL = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES (NULL, '$userID', '$newColor', '$newFunction')";
-    $result = mysqli_query($connection, $SQL);
+    $sqlNewColor = "SELECT * FROM kleuren WHERE userID = '$userID' AND functie = '$newFunction'";
+    $resultNewColor = mysqli_query($connection, $sqlNewColor);
+    $resultCheckNewColor = mysqli_num_rows($resultNewColor);
 
+    if($resultCheckNewColor > 0){
+        //get the values from the custom database
+        $sqlNewColor = "SELECT * FROM kleuren WHERE userID = '$userID' AND functie = '$newFunction'";
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+        //remove the old color from the database
+        while ($row = mysqli_fetch_assoc($resultNewColor)) {
+            $oldColorID = $row['id'];
+            $olduserID = $row['userID'];
+            $oldColor = $row['kleur'];
+            $oldFunction = $row['functie'];
+
+            removeFromCustomDB("kleuren", $oldColorID, $olduserID, $oldColor, $oldFunction);
+        }
+
+        $sqlNewColor = "UPDATE kleuren SET kleur = '$newColor' WHERE userID = '$userID' AND functie = '$newFunction'";
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+        //add the new color to the database
+        $sqlNewColor = "SELECT * FROM kleuren WHERE userID = '$userID' AND functie = '$newFunction'";
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+        while($row = mysqli_fetch_assoc($resultNewColor)) {
+            $newColorID = $row['id'];
+            $userID = $row['userID'];
+            $newColor = $row['kleur'];
+            $newFunction = $row['functie'];
+
+            writeToCustomDB("kleuren", $newColorID, $userID, $newColor, $newFunction);
+        }
+
+    } else {
+        $sqlNewColor = "INSERT INTO kleuren (id, userID, kleur, functie) VALUES (NULL, '$userID', '$newColor', '$newFunction')";
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+
+        $sqlNewColor = "SELECT * FROM kleuren WHERE userID = '$userID' AND functie = '$newFunction'";
+        $resultNewColor = mysqli_query($connection, $sqlNewColor);
+
+        while($row = mysqli_fetch_assoc($resultNewColor)) {
+            $newColorID = $row['id'];
+            $userID = $row['userID'];
+            $newColor = $row['kleur'];
+            $newFunction = $row['functie'];
+
+            writeToCustomDB("kleuren", $newColorID, $userID, $newColor, $newFunction);
+        }
+
+    }
     //refresh the page
     echo "<script>window.location.href = 'index.php';</script>";
-}
-
-//if color is deleted
-if(isset($_POST['remove-color-submit'])){
-    $id = $_POST['remove-color-select'];
-    $SQL = "DELETE FROM kleuren WHERE id = '$id'";
-    $result = mysqli_query($connection, $SQL);
-
-    //refresh the page
-    echo "<script>window.location.href</script>";
 }

@@ -89,7 +89,7 @@ div.addEventListener('mousemove', (e) => {
 document.getElementById('filter-functie').addEventListener('input', function (){
            
     //if there is a filter, hide all agenda items that don't have the same class as the filter
-    if(this.value !== 0) {
+    if(this.value !== "0") {
         let agendaItems = document.querySelectorAll('.agenda-item');
         for(let i = 0; i < agendaItems.length; i++) {
             if(agendaItems[i].classList.contains(this.value)) {
