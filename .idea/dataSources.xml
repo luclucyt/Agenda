@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="agenda@81.206.73.35" uuid="5708829c-6b84-4c47-a8c7-dabbc95b09a6">
-      <driver-ref>sqlserver.ms</driver-ref>
+    <data-source source="LOCAL" name="agenda@81.206.73.35" uuid="4f8ea50a-3290-4b8c-8cb3-a72220d84aa8">
+      <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://81.206.73.35;database=agenda</jdbc-url>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://81.206.73.35:3306/agenda</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
