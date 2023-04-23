@@ -149,6 +149,19 @@
                         $result4 = mysqli_query($connection, $sql4);
                         $result5 = mysqli_query($connection, $sql5);
 
+                        //get the data from the database
+                        $sql = "SELECT * FROM kleuren WHERE userID='$id'";
+                        $result = mysqli_query($connection, $sql);
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $kleurID = $row['id'];
+                            $kleurUserID = $row['userID'];
+                            $kleurKleur = $row['kleur'];
+                            $kleurFunctie = $row['functie'];
+
+                            writeToCustomDB("kleuren", $kleurID, $kleurUserID, $kleurKleur, $kleurFunctie);
+                        }
+
 
                         $sql1 = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$id', '$id')";
                         $result1 = mysqli_query($connection, $sql1);
@@ -161,10 +174,6 @@
                             $accessID = $row['id'];
                             $accessUserID = $row['userID'];
                             $accessAccesUserID = $row['accesUserID'];
-
-                            $accessID . str_replace("||", "/||", $accessID);
-                            $accessUserID . str_replace("||", "/||", $accessUserID);
-                            $accessAccesUserID . str_replace("||", "/||", $accessAccesUserID);
 
                             writeToCustomDB("access", $accessID, $accessUserID, $accessAccesUserID);
                         }
