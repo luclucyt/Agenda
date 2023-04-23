@@ -6,7 +6,7 @@ if(session_status() == PHP_SESSION_NONE) {
 }
 
 if(!isset($_SESSION['userID'])) {
-    echo "<script>window.location.href='login/login.php'</script>";
+    echo "<script>window.location.href='$_SERVER{`SERVER_NAME`}/PHP/login/login.php'</script>";
     exit();
 }
 
