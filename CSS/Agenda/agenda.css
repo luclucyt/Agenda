@@ -10,9 +10,9 @@ body{
     float: right;
 
 
-    margin-top: 7vh;
     padding-left: 200px;
     padding-top: 20px;
+
 }
 .main-agenda-wrapper{
     display: flex;
@@ -29,7 +29,6 @@ body{
     overflow-y: visible;
     overflow-x: visible;
     scroll-margin-top: 200px;
-
 }
 
 .agenda-item, .agenda-item-temp{
@@ -394,4 +393,7 @@ body{
 
     overflow-y: auto;
     overflow-x: hidden;
+
+    top: 6.5%;
+    left: 0.5%
 }

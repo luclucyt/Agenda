@@ -213,7 +213,8 @@
                     $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
 
                     // Get the name of the day of the week
-                    $day_name = strftime('%A', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+                    $day_name = date('l', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
+
 
                     if    ($day_name == "Monday"   ) { $day_name = "Ma";}
                     elseif($day_name == "Tuesday"  ) { $day_name = "Di";} 
@@ -223,11 +224,12 @@
                     elseif($day_name == "Saturday" ) { $day_name = "Za";}
                     elseif($day_name == "Sunday"   ) { $day_name = "Zo";}
 
+
                     //if it is today, add the class 'current-day'
                     if ($date == date('jS M')) {
-                        $date = "<div class='agenda-day current-day'><label>$date, $day_name</label></div>";
+                        $date = "<div class='agenda-day current-day'><label style='font-size:1vw'>$date $day_name</label></div>";
                     } else {
-                        $date = "<div class='agenda-day'><label>$date $day_name</label></div>";
+                        $date = "<div class='agenda-day'><label style='font-size:1vw'>$date $day_name</label></div>";
                     }
                     echo $date;
                 }
@@ -285,7 +287,7 @@
         if (event.target === agenda_wrapper) {
             //mouse is pressed on the agenda
             is_dragging = true;
-            start_row = get_row(event)[0] + 1;
+            start_row = get_row(event)[0];
             start_time = get_row(event)[1];
 
             colom = get_colom(event)[0] + 1;
