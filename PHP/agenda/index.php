@@ -1,11 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <!-- META TAGS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- FAVICON -->
     <link rel="icon" type="image/x-icon" href="../../CSS/notebook.png">
 
+    <!-- TITLE -->
     <title>Agenda</title>
     
     <!-- CSS -->
@@ -19,6 +23,7 @@
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../../JS/agenda/coloris.min.js"></script>
+
     <script src="../../JS/agenda/agenda.js" defer></script>
 </head>
 
@@ -27,80 +32,41 @@
     <?php include '../connectDatabase.php'; ?>
     <?php include '../connectCustomDB.php'; ?>
     <?php include 'addToAgenda.php'; ?>
+    
 
-
-    <header class="header">
-        <div class="left-side-header">
-            <h2>Welkom <?= $_SESSION['username'] ?>,</h2>
+    <header class="main-header">
+        <div class="header-left-side">
+            <h2 class="header-welcome">Welkom <?= $_SESSION['username'] ?>,</h2>
 
             <?php displayWeekDateHeader(); ?>
 
             <form method="post" class="week-button-wrapper">
-                <input type="submit" name="this_week" value="Vandaag" class="this-week">
                 <div class="change-week-wrapper">
                     <input type="submit" name="prev_week" value="<" class="change-week-button">
                     <input type="submit" name="next_week" value=">" class="change-week-button">
                 </div>
+                <input type="submit" name="this_week" value="Vandaag" class="this-week">
             </form>
-            
-            
-            <?php
-                //get the week start and end dates if not already set
-                if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
-                    $date = date('Y-m-d');
-                    $current_week_day = date('N', strtotime($date));
-                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
 
-                    $_SESSION['week_start'] = $week_start;
-                    $_SESSION['week_end'] = $week_end;
-                } else {
-                    $week_start = $_SESSION['week_start'];
-                    $week_end = $_SESSION['week_end'];
-                }
-
-                if(isset($_POST['prev_week'])) {
-                    //move the week start and end dates back one week
-                    $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_start'])));
-                    $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('-1 week', strtotime($_SESSION['week_end'])));
-                }
-
-                if(isset($_POST['this_week'])) {
-                    $date = date('Y-m-d');
-                    $current_week_day = date('N', strtotime($date));
-                    $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
-                    $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
-
-                    $_SESSION['week_start'] = $week_start;
-                    $_SESSION['week_end'] = $week_end;
-                }
-
-                if(isset($_POST['next_week'])) {
-                    //move the week start and end dates forward one week
-                    $week_start = $_SESSION['week_start'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_start'])));
-                    $week_end = $_SESSION['week_end'] = date('Y-m-d', strtotime('+1 week', strtotime($_SESSION['week_end'])));
-                }
-
-                echo "<input type='hidden' id='week_start' value='$week_start'>";
-            ?>
+            <!-- change week --> 
+            <?php include 'changeWeek.php'; ?>
         </div>
 
         <div class="right-side-header">
-            <form method="post" class="log-out-form">
+            <form method="post" action="">
                 <input type="submit" name="logout" value="Log uit" class="log-out">
+                <input type="submit" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = '../settings.php';">
+                <input type="button" name="share-input" value="Deel" class="share-input">
             </form>
-            <form method="post" class="settings-form-wrapper">
-                <input type="button" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = '../settings.php';">
-            </form>
-            <input type="button" name="share-input" value="Deel" class="share-input">
         </div>
     </header>
 
     <!-- share form -->
     <div class="share-display-wrapper">
         <div class="share-display-from-wrapper">
-            <form action="" method="POST" autocomplete="off" style="height: 100%; width: 100%; position: relative">
+            <form action="" method="POST" autocomplete="off">
                 <input type="text" placeholder="Gebruikersnaam" class="share-display-form-input" name="share-main-form">
+                
                 <div id="result"></div>
                 
                 <input type="submit" value="Deel" class="share-display-form-submit" name="share-from-submit">

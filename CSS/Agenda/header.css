@@ -1,4 +1,4 @@
-.header{
+.main-header{
     width: 98%;
     display: flex;
 
@@ -15,7 +15,7 @@
     font-size: 1vw;
 }
 
-.left-side-header, .right-side-header{
+.header-left-side, .right-side-header{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -131,6 +131,10 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+}
+
+.share-display-from-wrapper form{
+    height: 100%; width: 100%; position: relative
 }
 
 .share-display-form-input, .share-display-form-submit{
