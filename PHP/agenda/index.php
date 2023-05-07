@@ -38,7 +38,9 @@
         <div class="header-left-side">
             <h2 class="header-welcome">Welkom <?= $_SESSION['username'] ?>,</h2>
 
-            <?php displayWeekDateHeader(); ?>
+            <div class="header-current-week">
+                <?php displayWeekDateHeader(); ?>
+            </div>
 
             <form method="post" class="week-button-wrapper">
                 <div class="change-week-wrapper">
@@ -52,13 +54,12 @@
             <?php include 'changeWeek.php'; ?>
         </div>
 
-        <div class="right-side-header">
-            <form method="post" action="">
-                <input type="submit" name="logout" value="Log uit" class="log-out">
-                <input type="submit" name="settings-input" value="Instellingen" class="settings-input" onclick="window.location.href = '../settings.php';">
-                <input type="button" name="share-input" value="Deel" class="share-input">
-            </form>
-        </div>
+        
+        <form method="post" action="" class="header-right-side">
+            <input type="submit" name="logout" value="Log uit" class="header-log-out">
+            <input type="submit" name="settings-input" value="Instellingen" class="header-settings-input" onclick="window.location.href = '../settings.php';">
+            <input type="button" name="share-input" value="Deel" class="header-share-input">
+        </form>
     </header>
 
     <!-- share form -->
@@ -528,9 +529,12 @@ if(isset($_POST['share-from-submit'])){
         if($resultCheck > 0){
             while($row = mysqli_fetch_assoc($resultShare)) {
                 $shareUserID = $row['id'];
+                
+                $SqlAccess = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
+                
+                $result = mysqli_query($connection, $SqlAccess);
+                $resultCheck = mysqli_num_rows($result);
 
-                $SQL = "INSERT INTO access (id, userID, accesUserID) VALUES ('', '$shareUserID', '$userID')";
-                $result = mysqli_query($connection, $SQL);
 
                 //get the data from the database
                 $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID' AND accesUserID = '$shareUserID'";
@@ -542,7 +546,7 @@ if(isset($_POST['share-from-submit'])){
                     $accesUserID = $row['accesUserID'];
 
                     writeToCustomDB("access", $id, $userID);
-                }
+                }                    
 
                 if($result){
                     echo "<script>alert('De gebruiker heeft nu toegang tot jouw agenda')</script>";
@@ -572,7 +576,6 @@ if(isset($_POST['agenda-delete'])){
         $agendaItemtaak = $row['taak'];
         $agendaItemFunctie = $row['functie'];
         $agendaItemKleur = $row['kleur'];
-
 
         removeFromCustomDB("agenda", $agendaItemID, $agendaItemUserID, $agendaItemNaam, $agendaItemOmschrijving, $agendaItemStartDatum, $agendaItemEindDatum, $agendaItemStartTijd, $agendaItemEindTijd, $agendaItemtaak, $agendaItemFunctie, $agendaItemKleur);
     }

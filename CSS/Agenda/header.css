@@ -15,14 +15,14 @@
     font-size: 1vw;
 }
 
-.header-left-side, .right-side-header{
+.header-left-side, .header-right-side{
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 30%;
 }
 
-.right-side-header{ justify-content: flex-end; }
+.header-right-side{ justify-content: flex-end; }
 
 
 .week-button-wrapper{
@@ -82,7 +82,7 @@
     margin-top: -3px;
 }
 
-.log-out, .share-input, .settings-input{
+.header-log-out, .header-share-input, .header-settings-input{
     width: 150px;
     height: 4vh;
     font-size: 1.2rem;
@@ -93,11 +93,11 @@
     align-items: center;
 }
 
-.log-out{ border-radius: 10px 0 0 10px; }
-.share-input{ border-radius: 0 10px 10px 0; }
-.settings-input{ margin: 0 10px; }
+.header-log-out{ border-radius: 10px 0 0 10px; }
+.header-share-input{ border-radius: 0 10px 10px 0; }
+.header-settings-input{ margin: 0 10px; }
 
-.log-out:hover, .share-input:hover, .settings-input:hover{
+.header-log-out:hover, .header-settings-input:hover, .header-share-input:hover{
     background: var(--text);
     color: var(--oxford-blue);
     margin-top: -10px;

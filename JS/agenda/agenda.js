@@ -116,7 +116,7 @@ document.getElementById('filter-functie').addEventListener('input', function (){
 let isOpen = true;
 toggleShareWrapper();
 
-document.getElementsByClassName("share-input")[0].addEventListener('click', function() {
+document.getElementsByClassName("header-share-input")[0].addEventListener('click', function() {
     toggleShareWrapper();
 });
 
