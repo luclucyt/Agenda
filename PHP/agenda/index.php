@@ -253,28 +253,31 @@
 
     agenda_wrapper.addEventListener('mousedown', function(event) {
 
-        if (event.target === agenda_wrapper) {
-            //mouse is pressed on the agenda
-            is_dragging = true;
-            start_row = get_row(event)[0];
-            start_time = get_row(event)[1];
+    if (event.target === agenda_wrapper) {
+        //mouse is pressed on the agenda
+        is_dragging = true;
+        start_row = get_row(event)[0] + 1;
+        start_time = get_row(event)[1];
 
-            colom = get_colom(event)[0] + 1;
+        colom = get_colom(event)[0] + 1;
 
-            week_start = document.getElementById('week_start').value;
-            week_start = new Date(week_start);
+        week_start = document.getElementById('week_start').value;
+        week_start = new Date(week_start);
 
-            start_date = new Date(week_start);
-            start_date.setDate(week_start.getDate() + get_colom(event)[1]);
+        start_date = new Date(week_start);
+        start_date.setDate(week_start.getDate() + get_colom(event)[1]);
 
-            start_date = start_date.toISOString().substring(0, 10)
+        start_date = start_date.toISOString().substring(0, 10)
 
-            //remove all the temp agenda items
-            let temp_items = document.querySelectorAll('.agenda-item-temp');
-            temp_items.forEach(function (item) {
-                item.remove();
-            });
-        }
+        //document.getElementById('agenda-start-time').value = start_time;
+
+
+        //remove all the temp agenda items
+        let temp_items = document.querySelectorAll('.agenda-item-temp');
+        temp_items.forEach(function (item) {
+            item.remove();
+        });
+    }
 
     });
 
@@ -311,15 +314,6 @@
 
                 start_timeInverted = true;
             }
-
-            //if start/end time is bigger than 24:00 then change it to 23:45
-            if (start_time >= 23.75){
-                start_time = 23.75;
-            }
-            if (end_time >= 23.76){
-                end_time = 23.75;
-            }
-
 
             document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
             <form method="POST" action="" autocomplete="off" id="add-to-agenda-form">
@@ -410,9 +404,7 @@
     function get_row(event){
         let rect = agenda_wrapper.getBoundingClientRect();
         let y = event.clientY - rect.top;
-        row_height = 14;
-
-        
+        let row_height = agenda_wrapper.clientHeight / row_amount;
 
         //calucate the time that corresponds to the row (1 row = 15 minutes)
         let time = Math.floor(y / row_height) * 15;
@@ -422,7 +414,7 @@
         // format the time value so it can be used in the input field
         let formatted_time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
 
-       
+        //console.log(formatted_time);
 
         return [Math.floor(y / row_height), formatted_time];
     }
