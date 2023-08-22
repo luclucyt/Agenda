@@ -6,6 +6,15 @@
     --federal-blue: rgb(20, 1, 82);
     --neavy-blue: rgb(34, 0, 124);
     --dark-blue: rgb(13, 0, 164); 
+
+    --black: #04060d;
+    --black-transparent: #04060d66;
+    --iron: #D3D4D7;
+    --white: #FFFFFF;
+    --dark-blue: #2824e4;
+    --blue: #4034fc;
+    --light-blue: #3E8DE3;
+    --light-blue-transparent: #3f8fe480;
 }
 
 *{
@@ -21,12 +30,16 @@ h1, h2, h3, h4, h5, h6, p, li, a, button, input, textarea, select, option, label
 
 body{
     min-height: 98vh;
-    background-color: var(--oxford-blue);
+    background-image: url("background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    overflow: hidden;
+    margin: 0;
 }
 
 div{
     scrollbar-width: thin;
-    scrollbar-color: var(--neavy-blue) var(--oxford-blue);
 }
 
 /*width */

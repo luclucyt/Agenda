@@ -5,7 +5,7 @@ if(window.history.replaceState) {
     window.history.replaceState( null, null, window.location.href );
 }</script>";
 
-$servername = "81.206.73.35";
+$servername = "localhost";
 $username = "LucasDatabase";
 $password = "LucasDatabase";
 

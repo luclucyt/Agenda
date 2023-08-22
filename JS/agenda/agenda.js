@@ -109,39 +109,3 @@ document.getElementById('filter-functie').addEventListener('input', function (){
         }
     }
 });
-
-
-
-//share button/display
-let isOpen = true;
-toggleShareWrapper();
-
-document.getElementsByClassName("header-share-input")[0].addEventListener('click', function() {
-    toggleShareWrapper();
-});
-
-document.getElementsByClassName("share-display-wrapper")[0].addEventListener('click', function(event) {
-    //if it is not any of the children of the share-wrapper
-    if(event.target === this) {
-        toggleShareWrapper();
-    }
-});
-
-function toggleShareWrapper() {
-    let shareWrapper = document.getElementsByClassName("share-display-wrapper")[0];
-    if(isOpen === false){
-        shareWrapper.style.width = "100%";
-        shareWrapper.style.height = "100%";
-        shareWrapper.style.display = "flex";
-        shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-        isOpen = true;
-    }else{
-        shareWrapper.style.width = "0%";
-        shareWrapper.style.height = "0%";
-        shareWrapper.style.display = "none";
-        shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0)";
-        isOpen = false;
-    }
-}
-
-document.getElementsByClassName("main-main-agenda-wrapper")[0].scrollTop = 400;

@@ -18,25 +18,23 @@
 
     <link rel="stylesheet" href="../../CSS/Agenda/agenda.css">
     <link rel="stylesheet" href="../../CSS/Agenda/header.css">
-    <link rel="stylesheet" href="../../CSS/Agenda/agendaHeader.css">
+    <link rel="stylesheet" href="../../CSS/Agenda/share.css">
 
     <!-- JAVA SCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../../JS/agenda/coloris.min.js"></script>
 
     <script src="../../JS/agenda/agenda.js" defer></script>
+    <script src="../../JS/agenda/accordion.js" defer></script>
 </head>
 
 <body>
     <?php include '../forceLogin.php' ?>
     <?php include '../connectDatabase.php'; ?>
-    <?php include '../connectCustomDB.php'; ?>
     <?php include 'addToAgenda.php'; ?>
     
-    <header class="main-header">
-        <div class="header-left-side">
-            <h2 class="header-welcome">Welkom <?= $_SESSION['username'] ?>,</h2>
-
+    <header class="header">
+        <div class="date-controller">
             <div class="header-current-week">
                 <?php displayWeekDateHeader(); ?>
             </div>
@@ -53,179 +51,119 @@
             <?php include 'changeWeek.php'; ?>
         </div>
 
-        
-        <form method="post" action="" class="header-right-side">
-            <input type="submit" name="logout" value="Log uit" class="header-log-out">
-            <input type="submit" name="settings-input" value="Instellingen" class="header-settings-input" onclick="window.location.href = '../settings.php';">
-            <input type="button" name="share-input" value="Deel" class="header-share-input">
-        </form>
-    </header>
-
-    <!-- share form -->
-    <div class="share-display-wrapper">
-        <div class="share-display-from-wrapper">
-            <form action="" method="POST" autocomplete="off">
-                <input type="text" placeholder="Gebruikersnaam" class="share-display-form-input" name="share-main-form">
-                
-                <div id="result"></div>
-                
-                <input type="submit" value="Deel" class="share-display-form-submit" name="share-from-submit">
-            </form>
-        </div>
-    </div>
-
-    <?php
-        if(isset($_POST['shareInputValue'])){
-            $shareInputValue = $_POST['shareInputValue'];
-            echo "<div class='reponesForHTML'>";
-                if($shareInputValue !== "") {
-                    $SQL =  "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
-                    $resultShare = mysqli_query($connection, $SQL);
-                    $resultCheck = mysqli_num_rows($resultShare);
-
-                    if ($resultCheck > 0) {
-                        while ($row = mysqli_fetch_assoc($resultShare)) {
-                            $shareUserID = $row['username'];
-                            echo "<div class='share-user-wrapper' onclick='updateShare(`$shareUserID`)'><p class='share-user'>$shareUserID</p></div>";
-                        }
-                    }
-                }
-            echo "</div>";
-        }
-    ?>
-
-    <section class="view-wrapper">
-        <div class="functie-wrapper">
-            <div class="new-color-wrapper">
-                <h4>Nieuwe functie toevoegen:</h4>
-                <form method="POST" action="index.php">
-                    <label for="new-functie">Nieuwe functie:</label>
-                    <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
-
-                    <label for="new-color">Nieuwe kleur:</label>
-                    <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
-
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
-
-                    <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
-                </form>
-            </div>
-
-            <div class="functie-line"></div>
-            
-            <div class="remove-color-wrapper">
-                <h4>Functie verwijderen:</h4>
-                <form method="POST" action="">
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
-
-                    <label for="remove-functie">Verwijder functie:</label><br>
-                    <select name="remove-color-select" id="remove-color-select">
-                        <?php getColors($userID, $connection); ?>
-                    </select><br>
-                    <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
-                </form>
-            </div>
-            <?php 
-                //if color is deleted
-                if(isset($_POST['remove-color-select'])){
-                    $id = $_POST['remove-color-select'];
-
-                    //get the data from the database
-                    $sql = "SELECT * FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
-                    $result = mysqli_query($connection, $sql);
-
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $colorID = $row['id'];
-                        $colorUserID = $row['userID'];
-                        $colorName = $row['kleur'];
-                        $colorFunction = $row['functie'];
-
-                        //delete the data from the database
-                        removeFromCustomDB("kleuren", $colorID, $colorUserID, $colorName, $colorFunction);
-                    }
-
-                    $SQL = "DELETE FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
-
-                    $result = mysqli_query($connection, $SQL);
-
-                    echo "<script>window.location.href</script>";
-                    echo "<script>window.location.reload()</script>";
-                } 
-            ?>
-        </div>
-
-        <div class="agenda-filter-wrapper">
-            <div class="filter-wrapper">
-                <h4>Filter:</h4>
-                <form method="POST" action="">
-                    <select name="filter-functie" id="filter-functie">
-                        <option value="0">Geen filter</option>
-                        <?php getColors($userID, $connection) ?>
-                    </select><br>
-                </form>
-            </div>
-        </div>
-
-        <div class="agenda-hide-wrapper"></div>
-    </section>
-
-    
-
-    
-    <div class="main-main-agenda-wrapper">
         <div class='agenda-header'>
             <?php
+                $daysOfWeek = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
+                $weekStart = strtotime($_SESSION['week_start']);
+                
                 for ($i = 0; $i < 7; $i++) {
-                    $date = date('jS M', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
-
-                    // Get the name of the day of the week
-                    $day_name = date('l', strtotime($_SESSION['week_start'] . ' +' . $i . ' days'));
-
-
-                    if    ($day_name == "Monday"   ) { $day_name = "Ma";}
-                    elseif($day_name == "Tuesday"  ) { $day_name = "Di";} 
-                    elseif($day_name == "Wednesday") { $day_name = "Wo";} 
-                    elseif($day_name == "Thursday" ) { $day_name = "Do";} 
-                    elseif($day_name == "Friday"   ) { $day_name = "Vr";} 
-                    elseif($day_name == "Saturday" ) { $day_name = "Za";}
-                    elseif($day_name == "Sunday"   ) { $day_name = "Zo";}
-
-
-                    //if it is today, add the class 'current-day'
-                    if ($date == date('jS M')) {
-                        $date = "<div class='agenda-day current-day'><label style='font-size:1vw'>$date $day_name</label></div>";
-                    } else {
-                        $date = "<div class='agenda-day'><label style='font-size:1vw'>$date $day_name</label></div>";
-                    }
-                    echo $date;
+                    $currentDate = date('jS M', $weekStart + $i * 86400); // Calculate the current date
+                    $dayName = $daysOfWeek[date('N', $weekStart + $i * 86400) - 1]; // Get the day name (Mon, Tue, etc.)
+                    
+                    //if it is today, add the 'current-day' class DONT ASK ME HOW THIS WORKS
+                    $currentDayClass = (date('Y-m-d', $weekStart + $i * 86400) == date('Y-m-d') ? ' current-day' : '');
+                
+                    echo "<div class='agenda-day$currentDayClass'><label style='font-size:1vw'>$currentDate $dayName</label></div>";
                 }
             ?>
         </div>
+        
+    </header>
+    
+    <main>
+        <section class="view-wrapper">
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Functie Toevoegen</h4> 
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="index.php">
+                        <label for="new-functie">Nieuwe functie:</label>
+                        <input type="text" id="new-functie" name="new-functie" placeholder="Naam functie"><br>
 
-        <div class='agenda-line-wrapper'>
-            <?php
-                for($i = 1; $i <= 7; $i++){
-                    echo "<div class='agenda-day-line'></div>";
-                }
-            ?>
-        </div>
-      
-        <div class='agenda-grid-wrapper'>
-             
-            <div class="agenda-times">
-                <?php 
-                    for($i = 0; $i <= 23; $i++){ 
-                    echo '<div class="time-wrapper">
-                            <!-- <div class="time-header"><label>'.$i.' uur</label></div> -->
-                            <div class="time-line"></div>
-                        </div> ';
+                        <label for="new-color">Nieuwe kleur:</label>
+                        <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
+
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
+                    </form>                
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Functie Verwijderen</h4> 
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <label for="remove-functie">Verwijder functie:</label><br>
+                        <select name="remove-color-select" id="remove-color-select">
+                            <?php getColors($userID, $connection); ?>
+                        </select><br>
+                        <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Filter</h4>
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <select name="filter-functie" id="filter-functie">
+                            <option value="0">Geen filter</option>
+                            <?php getColors($userID, $connection) ?>
+                        </select><br>
+                    </form>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Deel</h4>
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <input type="text" name="share-input" placeholder="Gebruikersnaam" class="share-input">
+                        <input type="submit" name="share-submit" value="Deel" class="share-submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="agenda-hide-wrapper">
+            </div>
+        </section>
+        
+        <section class="main-main-agenda-wrapper">
+            <div class='agenda-line-wrapper'>
+                <?php
+                    for($i = 1; $i <= 7; $i++){
+                        echo "<div class='agenda-day-line'></div>";
                     }
                 ?>
             </div>
-                    
-            <?php require_once 'displayAgendaItems.php'; ?>
-        </div>
-    </div>
+        
+            <div class='agenda-grid-wrapper'>
+                
+                <div class="agenda-times">
+                    <?php 
+                        for($i = 0; $i <= 23; $i++){ 
+                        echo '<div class="time-wrapper">
+                                <div class="time-header"><label>'.$i.' uur</label></div>
+                                <div class="time-line"></div>
+                            </div> ';
+                        }
+                    ?>
+                </div>
+                        
+                <?php require_once 'displayAgendaItems.php'; ?>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
 
@@ -404,11 +342,8 @@
     function get_row(event){
         let rect = agenda_wrapper.getBoundingClientRect();
         let y = event.clientY - rect.top;
-<<<<<<< Updated upstream
         let row_height = agenda_wrapper.clientHeight / row_amount;
-=======
         row_height = 14;
->>>>>>> Stashed changes
 
         //calucate the time that corresponds to the row (1 row = 15 minutes)
         let time = Math.floor(y / row_height) * 15;
@@ -441,8 +376,12 @@
         if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
             $date = date('Y-m-d');
             $current_week_day = date('N', strtotime($date));
+
+            //calculate the week start and end date
             $week_start = date('Y-m-d', strtotime('-' . ($current_week_day - 1) . ' days', strtotime($date)));
             $week_end = date('Y-m-d', strtotime('+' . (7 - $current_week_day) . ' days', strtotime($date)));
+            
+            //store them in the session
             $_SESSION['week_start'] = $week_start;
             $_SESSION['week_end'] = $week_end;
         }
@@ -464,20 +403,12 @@
 
         $week_number = date('W', strtotime($week_start));
 
-        $month = date('F', strtotime($week_start));
-
-        if($month == "January"){  $month = "Januari"; }
-        if($month == "February"){ $month = "Februari"; }
-        if($month == "March"){    $month = "Maart"; }
-        if($month == "May"){      $month = "Mei"; }
-        if($month == "June"){     $month = "Juni"; }
-        if($month == "July"){     $month = "Juli"; }
-        if($month == "August"){   $month = "Augustus"; }
-        if($month == "October"){  $month = "Oktober"; }
+        //get the month (in a number)
+        $month = date('m', strtotime($week_start));
 
         $year = date('Y', strtotime($week_start));
 
-        echo "<h3>$month $year, week: $week_number</h3>";
+        echo "<h3>$month, $year, week: $week_number</h3>";
     }
 
     function getColors($userID, $connection){
@@ -493,11 +424,30 @@
 
 
 <?php
-//ISSETS
-if (isset($_POST['logout'])) {
-    session_destroy();
-    echo "<script>window.location.href = '../login/login.php';</script>";
-}
+ 
+//if color is deleted
+if(isset($_POST['remove-color-select'])){
+    $id = $_POST['remove-color-select'];
+
+    //get the data from the database
+    $sql = "SELECT * FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
+    $result = mysqli_query($connection, $sql);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $colorID = $row['id'];
+        $colorUserID = $row['userID'];
+        $colorName = $row['kleur'];
+        $colorFunction = $row['functie'];
+
+    }
+
+    $SQL = "DELETE FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
+
+    $result = mysqli_query($connection, $SQL);
+
+    echo "<script>window.location.href</script>";
+    echo "<script>window.location.reload()</script>";
+} 
 
 if(isset($_POST['share-from-submit'])){
     $shareUsername = $_POST['share-main-form'];
@@ -543,7 +493,6 @@ if(isset($_POST['share-from-submit'])){
                     $userID = $row['userID'];
                     $accesUserID = $row['accesUserID'];
 
-                    writeToCustomDB("access", $id, $userID);
                 }                    
 
                 if($result){
@@ -575,7 +524,6 @@ if(isset($_POST['agenda-delete'])){
         $agendaItemFunctie = $row['functie'];
         $agendaItemKleur = $row['kleur'];
 
-        removeFromCustomDB("agenda", $agendaItemID, $agendaItemUserID, $agendaItemNaam, $agendaItemOmschrijving, $agendaItemStartDatum, $agendaItemEindDatum, $agendaItemStartTijd, $agendaItemEindTijd, $agendaItemtaak, $agendaItemFunctie, $agendaItemKleur);
     }
 
     $sqlAgenda = "DELETE FROM agenda WHERE id = '$id'";
@@ -609,7 +557,6 @@ if(isset($_POST['new-color-submit'])){
             $oldColor = $row['kleur'];
             $oldFunction = $row['functie'];
 
-            removeFromCustomDB("kleuren", $oldColorID, $olduserID, $oldColor, $oldFunction);
         }
 
         $sqlNewColor = "UPDATE kleuren SET kleur = '$newColor' WHERE userID = '$userID' AND functie = '$newFunction'";
@@ -628,7 +575,6 @@ if(isset($_POST['new-color-submit'])){
             $newColor = $row['kleur'];
             $newFunction = $row['functie'];
 
-            writeToCustomDB("kleuren", $newColorID, $userID, $newColor, $newFunction);
         }
 
     } else {
@@ -645,7 +591,6 @@ if(isset($_POST['new-color-submit'])){
             $newColor = $row['kleur'];
             $newFunction = $row['functie'];
 
-            writeToCustomDB("kleuren", $newColorID, $userID, $newColor, $newFunction);
         }
 
     }
